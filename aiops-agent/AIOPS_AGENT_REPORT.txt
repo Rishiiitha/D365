@@ -1,0 +1,355 @@
+================================================================================
+AIOPS-AGENT ARCHITECTURE & SYSTEM UNDERSTANDING REPORT
+================================================================================
+Generated on: 2026-10-31
+Target Folder: aiops-agent/
+Workspace: TCS-Hackathon
+Test Suite Status: 71/71 Tests Passed (100% Passing)
+
+--------------------------------------------------------------------------------
+1. EXECUTIVE SUMMARY & PURPOSE
+--------------------------------------------------------------------------------
+The `aiops-agent` package is a production-grade autonomous Site Reliability 
+Engineering (SRE) incident investigation, diagnosis, and remediation framework.
+It is architected around a strict six-phase incident lifecycle designed to ingest
+raw observability telemetry (metrics, logs, traces, alerts, deployments, configs),
+generate and evaluate competing root-cause hypotheses, run bounded read-only 
+investigative queries, compute deterministic confidence scores, assess impact, 
+and propose exact remediation actions.
+
+Crucially, the system is designed with safety, deterministic guardrails, and 
+anti-hallucination mechanisms at its core:
+  - Deterministic Python Logic vs. LLM Roles: The LLM (configured for Groq or 
+    OpenAI-compatible endpoints) is strictly confined to generating competing 
+    hypotheses, selecting read-only inspection tools, classifying evidence 
+    relevance, and proposing recovery parameters. The LLM NEVER computes final 
+    confidence scores, NEVER declares confirmed root causes, and NEVER executes 
+    actions.
+  - Zero Production Mutation: All remediation operations are simulated inside an
+    in-memory state machine. No shell execution, arbitrary code execution, or 
+    cloud API mutation is permitted.
+  - Strict Human-in-the-Loop (HITL): Every simulated action requires explicit, 
+    single-use human authorization referencing a cryptographic SHA-256 digest 
+    of the exact target and parameters.
+  - Ground Truth Isolation: Benchmark answer keys (`key_evidence.json` and 
+    `verification_metrics.json`) are strictly excluded at ingestion time and are 
+    only read by the offline evaluation harness post-investigation.
+
+--------------------------------------------------------------------------------
+2. SIX-PHASE INCIDENT LIFECYCLE
+--------------------------------------------------------------------------------
+The workflow progresses through six distinct operational phases:
+
+  [Phase 1: Ingestion, Anomaly Detection & Timeline Construction]
+    - Telemetry files (logs, metrics, traces, config changes, deployments) are 
+      ingested into an immutable `EvidenceStore`.
+    - Statistical anomalies are computed (metric z-scores, normalized log spike 
+      ratios, trace failure rates).
+    - Chronological timeline is constructed with estimated incident onset.
+
+  [Phase 2: Topology & Read-Only Tool Dispatch]
+    - Trace parent/child spans and explicit dependencies construct a directed 
+      caller-to-dependency graph.
+    - Upstream and downstream blast radius calculations are established.
+    - Nine registered, audited, read-only tools are initialized with strict 
+      pagination, type bounds, and literal substring filtering.
+
+  [Phase 3: Multi-Agent Read-Only Investigation Loop]
+    - Four LLM agent roles interact iteratively:
+      * Hypothesis Agent -> Generates 3-5 competing, falsifiable hypotheses.
+      * Evidence Evaluator -> Classifies new evidence against each hypothesis.
+      * Orchestrator -> Plans next read-only tool invocation or stops.
+      * Remediation Agent -> Suggests exact parameter fixes once confirmed.
+    - All prompt messages are redacted for PII, tokens, and secrets.
+    - JSON responses are validated locally via JSON Schema; malformed outputs get 
+      exactly one retry attempt.
+
+  [Phase 4: Deterministic Confidence Engine & Impact Assessment]
+    - Python evaluates mathematical evidence mass:
+        contribution = reliability * relevance * timing * dependency * direction
+        score = max(0, signed_mass) / (saturation + positive_mass + contradiction_mass)
+    - Enforces hard physical causality (changes after symptom onset cannot be 
+      the cause; critical contradictions immediately block confirmation).
+    - Computes blast radius, failed trace counts, and affected caller services.
+
+  [Phase 5: Human-Gated Simulated Remediation]
+    - If a hypothesis is confirmed (score >= 0.65, lead margin >= 0.15, >= 2 strong 
+      supporting records, 0 unresolved contradictions), remediation is proposed.
+    - The Approval Gate outputs an exact action summary and demands an explicit 
+      human confirmation token: `APPROVE <action_id> <sha256_digest_12char>`.
+    - Executes state transition on simulated versions, configs, replicas, or restarts.
+
+  [Phase 6: Verification, Replanning & Reporting]
+    - `verifier.py` unlocks `verification_metrics.json` matching the exact action 
+      and checks for sustained health (>= 3 consecutive samples returning near baseline).
+    - If fix fails or only partially recovers, the failure is committed as new evidence, 
+      investigation is reopened, and replanning occurs (capped at 2 attempts).
+    - Produces a comprehensive, audited JSON incident report.
+
+--------------------------------------------------------------------------------
+3. DETAILED CODEBASE COMPONENT BREAKDOWN
+--------------------------------------------------------------------------------
+
+3.1 CONFIGURATION (`config.py`)
+  - `DetectionConfig`:
+      * `baseline_minutes` (default: 15 min): Initial window assumed healthy.
+      * `observation_minutes` (default: 5 min): Disjoint post-baseline windows.
+      * `min_baseline_samples` (default: 10): Minimum sample count for valid baseline.
+      * `warning_z` (2.0) and `strong_z` (3.0): Standard deviation thresholds.
+      * `spike_ratio` (3.0) and `min_pattern_count` (5): Log spike detection criteria.
+      * Metric directions: Explicit mapping for `higher_worse` (CPU, memory, 
+        latency, locks, error rate) and `lower_worse` (hit rate).
+  - `LLMConfig`:
+      * Supports `groq`, `openai`, and `openai_compatible`.
+      * Defaults to temperature 0.1 (capped at 0.0 - 0.2).
+      * Token bounds: 3,000 max output tokens per request, 48,000 prompt byte limit, 
+        24 max total requests, 48,000 max cumulative session output tokens.
+      * Loads automatically from `aiops-agent/.env` without polluting process env.
+
+3.2 EVIDENCE INGESTION & STORE (`loader.py`)
+  - `EvidenceStore`:
+      * Scenario-scoped immutable store mapping records to stable IDs (`EV-000001`...).
+      * Maintains full provenance: filename, line index, timestamp, and source IDs.
+      * Supports `.jsonl`, `.csv`, and `.json`.
+  - Harness Security:
+      * Files named `key_evidence` and `verification_metrics` are strictly barred 
+        from ingestion (`RESERVED` set) and marked as excluded.
+  - Schema Normalization:
+      * Requires standard fields for `application_logs`, `infra_logs`, `traces`, 
+        and `metrics`. Normalizes all timestamps into UTC ISO-8601 strings.
+      * Expands metric series with interval-based timestamps per point.
+
+3.3 ANOMALY DETECTION & TIMELINE (`anomaly_detector.py`, `timeline_builder.py`)
+  - `detect_metrics`:
+      * Calculates population mean and standard deviation (`pstdev`) over initial 
+        baseline samples.
+      * Computes z-scores on subsequent observation windows. Flags zero-variance 
+        deviations explicitly when baseline std is zero.
+  - `detect_log_spikes`:
+      * Normalizes message text via regex pattern replacement (replaces UUIDs with 
+        `<uuid>`, request/pod IDs with `<id>`, and integers/floats with `<n>`).
+      * Groups logs into 5-minute buckets; computes smoothed spike ratio:
+        ratio = (current_count + epsilon) / (normalized_baseline_count + epsilon)
+  - `trace_error_rates`:
+      * Deduplicates spans by `request_id` per window to compute true request-level 
+        failure percentages.
+  - `build_timeline`:
+      * Assembles timestamped logs, trace errors, and anomalies in sorted UTC order.
+      * Establishes estimated incident onset using the earliest run of three 
+        consecutive strong adverse error or latency metric observations.
+
+3.4 DEPENDENCY & TOPOLOGY GRAPH (`dependency_engine.py`)
+  - Constructs caller -> callee graph from:
+      1. Explicit `dependencies.json` (`caller`/`callee` or `service`/`depends_on`).
+      2. Distributed trace span trees (linking `span_id` to `parent_span_id`).
+  - Graph Integrity Safeguards:
+      * Filters out duplicate span IDs, missing parent spans, and cyclic ancestry.
+      * Avoids self-loops for same-service internal span calls.
+      * Explicitly marks graph coverage as partial.
+  - Upstream/Downstream Traversal:
+      * BFS traversal computes distance and blast radius (distinguishing direct 
+        dependents at distance 1 from indirect transitive dependents).
+
+3.5 READ-ONLY INVESTIGATION TOOLS (`tools.py`)
+  - Registry of 9 deterministic Python functions:
+      1. `query_logs`: Case-insensitive substring pattern search across service/node/pod.
+      2. `query_metrics`: Retrieves metric points bounded by service and metric name.
+      3. `get_traces`: Filters traces by service spans and status.
+      4. `get_alerts`: Retrieves fired alerts.
+      5. `get_deployments`: Inspects software version rollouts.
+      6. `get_config_changes`: Inspects runtime config or feature flag updates.
+      7. `get_dependencies`: Returns graph relationships and blast radius.
+      8. `search_past_incidents`: Literal keyword search across historical postmortems.
+      9. `search_support_tickets`: Searches customer/user ticket transcripts.
+  - Dispatch & Isolation:
+      * Enforces strict argument typing and page bounds (`limit` 1..500).
+      * Dispatched strictly via `InvestigationTools.call(name, args)`.
+      * Deep-copies all return objects to prevent agent mutation of stored evidence.
+      * Every invocation, argument set, returned evidence ID list, and error is 
+        recorded in `AuditLog`.
+
+3.6 SECURITY & SANITIZATION (`redaction.py`)
+  - Recursive scrubbing applied before storing transcripts or sending prompts to LLM:
+      * Replaces API keys, tokens (`sk-`, `ghp-`, `gsk_`, `AKIA...`), and JWTs.
+      * Masks IPv4 addresses, IPv6 addresses, emails, phone numbers, and auth headers.
+      * Strips user IDs, customer passwords, cookies, and secrets.
+      * Preserves numeric metrics, durations, and timestamps required for SRE diagnosis.
+
+3.7 AGENT ROLES & JSON CONTRACTS (`agents.py`, `agent_schemas.py`, `prompts/`)
+  - Seven-Type Incident Taxonomy:
+      1. `bad_deployment`
+      2. `config_change`
+      3. `resource_exhaustion`
+      4. `dependency_failure`
+      5. `database_issue`
+      6. `network_issue`
+      7. `third_party_degradation`
+  - Playbook Runbooks (`playbooks.json`):
+      * Supplies confirming/contradicting patterns, required signals, useful metrics, 
+        log signatures, common red herrings, safe remediation suggestions, and 
+        verification criteria for each of the 7 taxonomy types.
+  - Agent Schema Validation:
+      * Local validation using `jsonschema.Draft202012Validator`.
+      * Rejects undeclared evidence IDs, fabricated citations, duplicate hypothesis IDs, 
+        or incomplete evaluator matrices.
+      * Retries exactly once on validation failure with explicit error feedback.
+  - Rate Limiting & Budgets:
+      * Tracks Groq `x-ratelimit-reset-tokens` headers and sleeps dynamically.
+      * Context compression: samples evidence, compacts log messages (truncates >900 chars), 
+        limits spans (max 12), and explicitly marks omitted items to prevent token blowup.
+
+3.8 DETERMINISTIC CONFIDENCE ENGINE (`confidence_engine.py`)
+  - Evidence Weighting Formula:
+      * `reliability`: metrics (0.95), traces (0.90), configs/deploys (0.90), 
+        infra logs (0.85), app logs (0.80), alerts (0.70), tickets (0.40), past incidents (0.35).
+      * `relevance`: LLM-assigned score bounded to [0.0, 1.0].
+      * `timing`: 1.0 if change precedes onset; 0.0 if alleged causal change occurs 
+        after symptom onset; 0.5 if uncertain.
+      * `dependency`: 1.0 for target service; 0.65 for related graph dependents; 0.1 for 
+        unrelated services; 0.4 for unknown.
+      * `direction`: +1.0 (strong support), +0.5 (weak support), 0.0 (neutral), 
+        -0.5 (weak contradiction), -1.0 (strong contradiction).
+  - Scoring & Confirmation Criteria:
+      * Score: `max(0, signed_mass) / (2.0 + positive_mass + contradiction_mass)`.
+      * Requires `score >= 0.65`.
+      * Requires lead margin over second place `margin >= 0.15`.
+      * Requires at least 2 distinct meaningful supporting evidence items (contribution >= 0.2).
+      * Zero unresolved critical contradictions.
+      * If any condition fails, status is `insufficient_evidence` and the agent 
+        escalates rather than hallucinating a cause.
+
+3.9 IMPACT ASSESSMENT (`impact_assessment.py`)
+  - Measures factual blast radius strictly from observed data:
+      * Counts failed requests and total observed trace requests to determine 
+        true observed error rate.
+      * Analyzes adverse metric deviations across all affected services.
+      * Maps upstream reachability to identify exposed caller services.
+      * Refuses to invent speculative dollar figures, revenue loss, or unobserved user counts.
+
+3.10 HUMAN-IN-THE-LOOP APPROVAL GATE (`approval_gate.py`)
+  - Safe Remediation Types:
+      * `rollback_deployment`: target service + previous version string.
+      * `revert_config`: target service + config key + previous value.
+      * `restart_service`: target service.
+      * `scale_service`: target service + target replica count.
+  - Verification & Execution Rules:
+      * Actions must cite evidence that explicitly observed the target and parameter 
+        values (e.g., cannot roll back to a version not found in deployment logs).
+      * Computes SHA-256 digest of canonical JSON action object.
+      * Demands exact input string: `APPROVE <action_id> <sha256[:12]>`.
+      * Generates single-use random token. Modifying the action invalidates the token.
+      * Updates in-memory `SimulatedState` tracking versions, configs, replicas, and restarts.
+
+3.11 VERIFICATION & REPLANNING (`verifier.py`, `run_incident.py`)
+  - Verification Harness:
+      * Reads `verification_metrics.json` post-execution matching branch 
+        (`after_rollback`, `after_flag_disable`, `no_action`).
+      * Compares at least 3 recent post-fix samples against the original baseline.
+      * Evaluates sustained return to baseline within configured tolerance (20%).
+      * Classifies outcome as `recovered`, `partially_recovered`, or `not_recovered`.
+  - Failed-Fix Loop:
+      * If the fix fails, the failure result is converted into a structured evidence 
+        record and injected into the store.
+      * The investigation reopens with the new evidence.
+      * Confidence scores are recalculated, competing hypotheses are re-ranked, 
+        and a new remediation plan is requested (capped at 2 total recovery attempts).
+
+3.12 OFFLINE EVALUATION BENCHMARK (`evaluate.py`)
+  - Discovers all scenario directories in workspace.
+  - Compares final runtime reports against ground truth `key_evidence.json`:
+      * Root Cause Accuracy: Matches agent conclusion against expected taxonomy type.
+      * Key Evidence Coverage: Ratio of ground-truth evidence IDs cited by the agent.
+      * Structural Claim Traceability: Verifies that factual statements cite real, 
+        existing evidence IDs in `EvidenceStore`.
+      * Runs automated behavioral unit tests (testing late contradictions, failed 
+        fix replanning, and gate declines).
+
+--------------------------------------------------------------------------------
+4. DATA DIRECTORIES & SCENARIOS
+--------------------------------------------------------------------------------
+The project is set up with multi-scenario support:
+  1. `data_bulk/`:
+     - Contains 53,106 telemetry records:
+       * `application_logs.jsonl` (44,020 records)
+       * `infra_logs.jsonl` (2,225 records)
+       * `metrics.json` (6,461 records across 91 metric series)
+       * `traces.jsonl` (400 traces across 6 microservices)
+     - Scenario topology: `api-gateway` -> `order-service` -> `payment-service` 
+       -> `postgres-payments`, with `inventory-service` and `redis-cache`.
+     - Reserved evaluation files: `key_evidence.json` and `verification_metrics.json`.
+  2. `data/`:
+     - Contains structured multi-source benchmark scenarios:
+       * `scenario_1_bad_deployment`
+       * `scenario_2_bad_config`
+       * `scenario_3_memory_leak`
+     - Each scenario includes full auxiliary telemetry (alerts, deployments, 
+       config changes, dependencies, past incidents, support tickets).
+
+--------------------------------------------------------------------------------
+5. VERIFICATION & QUALITY ASSURANCE
+--------------------------------------------------------------------------------
+The test suite in `aiops-agent/tests/` contains 71 comprehensive unit tests:
+  - `test_phase1.py` (14 tests): Baseline validation, z-scores, log spike ratios, 
+    JSONL/CSV parsing, timestamp timezone checks, reserved file exclusion.
+  - `test_phase2.py` (14 tests): Dependency graph cycles, duplicate spans, blast 
+    radius traversal, tool pagination, literal search, audit log persistence.
+  - `test_agents.py` (16 tests): Schema validation, Groq HTTP contract, single retry 
+    limit, redaction of credentials/tokens, unpresented evidence rejection.
+  - `test_confidence_engine.py` (8 tests): Weighting formulas, physical timing 
+    penalties for late changes, critical contradiction blocking, margin checks.
+  - `test_approval_gate.py` (7 tests): Digest calculation, exact approval phrases, 
+    single-use token consumption, simulated state transitions, verifier checks.
+  - `test_failed_fix_replanning.py` (3 tests): Full end-to-end simulated workflow, 
+    re-investigation after failed remediation, independent second approval.
+  - `test_evaluation.py` (3 tests): Evaluation discovery, ground truth isolation, 
+    traceability calculation.
+
+All 71 tests execute and pass in ~1.5 seconds.
+
+--------------------------------------------------------------------------------
+6. CLI COMMAND REFERENCE & USAGE
+--------------------------------------------------------------------------------
+
+6.1 Running Unit Tests:
+    $env:PYTHONPATH = "aiops-agent"
+    python -m unittest discover -s aiops-agent/tests -v
+
+6.2 Phase 1 Inspection (Ingestion, Anomalies & Timeline):
+    python aiops-agent/inspect_scenario.py data_bulk --output aiops-agent/phase1_report.json
+
+6.3 Phase 2 Inspection (Graph & Audited Read-Only Tools):
+    python aiops-agent/inspect_tools.py data_bulk --output aiops-agent/phase2_report.json
+
+6.4 Phase 3 Preparation (Redacted Prompt Preview without LLM API call):
+    python aiops-agent/inspect_agents.py data_bulk --prepare-only --output aiops-agent/phase3_prepared_input.json
+
+6.5 Complete Workflow Run (Read-Only & Dry-Run Remediation):
+    python aiops-agent/run_incident.py data_bulk --output aiops-agent/report.json
+
+6.6 Interactive Incident Run (With Human Approval Prompt):
+    python aiops-agent/run_incident.py data_bulk --interactive --output aiops-agent/report.json
+
+6.7 Benchmark Evaluation:
+    python aiops-agent/evaluate.py data --output aiops-agent/evaluation.json
+
+--------------------------------------------------------------------------------
+7. ARCHITECTURAL STRENGTHS & KEY TAKEAWAYS
+--------------------------------------------------------------------------------
+1. Non-Hallucinatory Core: The agent cannot fabricate evidence, tool outputs, 
+   root causes, or recovery parameters. Every claim must cite valid evidence IDs 
+   matching stored records.
+2. Mathematical Objectivity: The confidence engine replaces LLM "vibes" and 
+   uncalibrated priors with transparent weighted arithmetic based on source 
+   reliability, topological distance, and physical temporal precedence.
+3. Fail-Safe Operations: In the presence of contradictory evidence or insufficient 
+   signal, the system cleanly escalates as `insufficient_evidence` rather than 
+   guessing.
+4. Comprehensive Auditing: Every prompt, tool call, evaluation, approval, and 
+   state mutation is logged to an immutable JSONL audit trail with timestamps.
+5. Production-Ready Security Posture: Extensive PII/credential redaction, 
+   loopback/HTTPS base URL enforcement, HTTP redirect blocking, token budgeting, 
+   and single-use cryptographic approval digests.
+
+================================================================================
+END OF REPORT
+================================================================================

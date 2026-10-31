@@ -1,0 +1,18 @@
+import {useCallback,useEffect,useRef,useState} from 'react';
+import type {Scenario,KBEntry} from '../data/scenarios';
+import {mockDataSource} from '../services/dataSource';
+export type Phase='idle'|'investigating'|'awaiting_approval'|'replanning'|'awaiting_revised_approval'|'executing'|'verifying'|'resolved'|'learned'|'rejected';
+export function useInvestigation(scenario:Scenario){
+ const [phase,setPhase]=useState<Phase>('idle'),[revealed,setRevealed]=useState(0),[elapsed,setElapsed]=useState(0),[injected,setInjected]=useState(false),[rejected,setRejected]=useState(false),[rejectedIndex,setRejectedIndex]=useState<number|undefined>(),[selectedRemediation,setSelectedRemediation]=useState(0),[kb,setKb]=useState<KBEntry[]>(()=>mockDataSource.getKnowledgeBase()),[learned,setLearned]=useState<KBEntry|undefined>(),[done,setDone]=useState(false),[fast,setFast]=useState(false),[runCount,setRunCount]=useState<Record<string,number>>({});
+ const started=useRef(0), timers=useRef<number[]>([]), phaseRef=useRef(phase); phaseRef.current=phase;
+ const clear=()=>{timers.current.forEach(clearTimeout);timers.current=[]}; const later=(fn:()=>void,ms:number)=>{timers.current.push(window.setTimeout(fn,ms));};
+ useEffect(()=>{setPhase('idle');setRevealed(0);setInjected(false);setRejected(false);setRejectedIndex(undefined);setSelectedRemediation(0);setDone(false);setLearned(undefined);setElapsed(0);setFast(false);clear();},[scenario.id]);
+ useEffect(()=>{if(phase==='investigating'){const id=window.setInterval(()=>setElapsed(Math.floor((Date.now()-started.current)/1000)),250);return()=>clearInterval(id)}},[phase]);
+ const start=useCallback(async()=>{clear();const result=await mockDataSource.startInvestigation(scenario.id);const n=(runCount[scenario.id]||0)+1;setRunCount(r=>({...r,[scenario.id]:n}));const isFast=!!result.learned;setFast(isFast);setLearned(result.learned);setElapsed(0);started.current=Date.now();setPhase('investigating');setDone(false);setInjected(false);setRejected(false);setRejectedIndex(undefined);setSelectedRemediation(0);setRevealed(0);const speed=isFast?250:850;for(let i=1;i<=11;i++){later(()=>setRevealed(i),i*speed)}later(()=>{setPhase('awaiting_approval');later(()=>{if(phaseRef.current==='awaiting_approval') inject()},2600)},12*speed);},[scenario.id,runCount]);
+ const inject=useCallback(async()=>{if(injected)return;await mockDataSource.injectEvidence();setInjected(true);setPhase('replanning');later(()=>setPhase('awaiting_revised_approval'),650);},[injected]);
+ const approve=useCallback(async(index=0)=>{await mockDataSource.approve();setSelectedRemediation(index);setPhase('executing');later(()=>setPhase('verifying'),1800);later(()=>{const entry:KBEntry={id:`KB-${String(mockDataSource.getKnowledgeBase().length+7).padStart(3,'0')}`,scenarioId:scenario.id,symptom:scenario.title,rootCause:scenario.rootCause,fix:scenario.remediations[index]?.title??scenario.remediations[0].title,resolutionTime:elapsed+5,learnedAt:new Date().toISOString()};mockDataSource.save(entry);setKb(mockDataSource.getKnowledgeBase());setLearned(entry);setDone(true);setPhase('resolved');later(()=>setPhase('learned'),900)},4200);},[scenario,elapsed]);
+ const reject=useCallback(async(index=0)=>{await mockDataSource.reject();setRejected(true);setRejectedIndex(index);setPhase('rejected');},[]);
+ const reset=useCallback(()=>{clear();mockDataSource.reset();setKb([]);setRunCount({});setPhase('idle');setRevealed(0);setElapsed(0);setLearned(undefined);setInjected(false);setRejected(false);setDone(false);},[]);
+ useEffect(()=>()=>clear(),[]);
+ return {phase,revealed,elapsed,injected,rejected,rejectedIndex,selectedRemediation,kb,learned,done,fast,start,inject,approve,reject,reset};
+}
