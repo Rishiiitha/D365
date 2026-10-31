@@ -1,0 +1,36 @@
+{
+  "evidence": [
+    {
+      "id": "INJ-001",
+      "ts": "2026-03-14T10:12:00.000Z",
+      "type": "code_change",
+      "summary": "PR #482 code review and diff summary",
+      "details": {
+        "commit": "a3f9c21",
+        "files_changed": [
+          "CouponService.java",
+          "PaymentController.java"
+        ],
+        "change_summary": "CouponService.applyCoupon calls CouponRepository.findByCode(code) and dereferences the returned value without a null check.",
+        "tests": "Unit tests cover valid and expired coupon codes; no empty-string case is present.",
+        "author": "priya.n",
+        "pull_request": 482
+      }
+    },
+    {
+      "id": "INJ-002",
+      "ts": "2026-03-14T10:13:00.000Z",
+      "type": "log_analysis",
+      "summary": "Computed payment checkout outcomes from 10:03 through the default clock",
+      "details": {
+        "payment_checkout_requests": 287,
+        "failed_requests": 97,
+        "successful_requests": 190,
+        "failed_with_couponCode_empty_percent": 100.0,
+        "successful_with_couponCode_empty_percent": 0.0,
+        "failed_with_couponCode_empty_count": 97,
+        "successful_with_couponCode_empty_count": 0
+      }
+    }
+  ]
+}

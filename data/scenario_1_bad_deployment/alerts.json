@@ -1,0 +1,114 @@
+{
+  "alerts": [
+    {
+      "id": "ALT-001",
+      "ts": "2026-03-14T09:20:00.000Z",
+      "service": "notification-service",
+      "name": "QueueDepthHigh",
+      "severity": "warning",
+      "status": "resolved",
+      "resolved_at": "2026-03-14T09:34:00.000Z",
+      "condition": "Queue depth > 500",
+      "current_value": "620"
+    },
+    {
+      "id": "ALT-002",
+      "ts": "2026-03-14T09:50:00.000Z",
+      "service": "inventory-service",
+      "name": "InventoryHighLatency",
+      "severity": "warning",
+      "status": "resolved",
+      "resolved_at": "2026-03-14T09:58:00.000Z",
+      "condition": "Redis latency > 200ms",
+      "current_value": "240ms"
+    },
+    {
+      "id": "ALT-003",
+      "ts": "2026-03-14T09:40:00.000Z",
+      "service": "node-2",
+      "name": "NodeDiskPressure",
+      "severity": "warning",
+      "status": "resolved",
+      "resolved_at": "2026-03-14T09:48:00.000Z",
+      "condition": "DiskPressure=True",
+      "current_value": "92%"
+    },
+    {
+      "id": "ALT-004",
+      "ts": "2026-03-14T10:06:30.000Z",
+      "service": "payment-service",
+      "name": "HighErrorRate",
+      "severity": "critical",
+      "status": "firing",
+      "resolved_at": null,
+      "condition": "Error rate > 5% for 3 minutes",
+      "current_value": "~40%"
+    },
+    {
+      "id": "ALT-005",
+      "ts": "2026-03-14T10:07:30.000Z",
+      "service": "order-service",
+      "name": "HighErrorRate",
+      "severity": "critical",
+      "status": "firing",
+      "resolved_at": null,
+      "condition": "Error rate > 5%",
+      "current_value": "rising"
+    },
+    {
+      "id": "ALT-006",
+      "ts": "2026-03-14T10:08:00.000Z",
+      "service": "api-gateway",
+      "name": "High5xxRate",
+      "severity": "warning",
+      "status": "firing",
+      "resolved_at": null,
+      "condition": "5xx rate > 5%",
+      "current_value": "rising"
+    },
+    {
+      "id": "ALT-007",
+      "ts": "2026-03-14T10:09:00.000Z",
+      "service": "checkout",
+      "name": "CheckoutSLOBurn",
+      "severity": "critical",
+      "status": "firing",
+      "resolved_at": null,
+      "condition": "Checkout success rate below SLO",
+      "current_value": "degraded"
+    },
+    {
+      "id": "ALT-008",
+      "ts": "2026-03-13T08:10:00.000Z",
+      "service": "auth-service",
+      "name": "AuthLatency",
+      "severity": "warning",
+      "status": "resolved",
+      "resolved_at": "2026-03-13T08:16:00.000Z",
+      "condition": "p99 > 250ms",
+      "current_value": "recovered"
+    },
+    {
+      "id": "ALT-009",
+      "ts": "2026-03-12T14:00:00.000Z",
+      "service": "redis-cache",
+      "name": "RedisReplicaLag",
+      "severity": "info",
+      "status": "resolved",
+      "resolved_at": "2026-03-12T14:04:00.000Z",
+      "condition": "Replica lag > 1s",
+      "current_value": "cleared"
+    },
+    {
+      "id": "ALT-010",
+      "ts": "2026-03-14T09:42:00.000Z",
+      "service": "auth-service",
+      "name": "FailedLoginBurst",
+      "severity": "info",
+      "status": "resolved",
+      "resolved_at": "2026-03-14T09:43:00.000Z",
+      "condition": "12 failed logins from one IP",
+      "current_value": "12"
+    }
+  ]
+}

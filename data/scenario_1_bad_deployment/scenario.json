@@ -1,0 +1,51 @@
+{
+  "id": "scenario_1_bad_deployment",
+  "folder": "scenario_1_bad_deployment",
+  "title": "Bad deployment: code bug in payment-service v1.8.0",
+  "sidebar_label": "Bad deployment",
+  "affected_service": "payment-service",
+  "severity": "critical",
+  "date": "2026-03-14",
+  "window_start": "2026-03-14T09:00:00.000Z",
+  "window_end": "2026-03-14T10:30:00.000Z",
+  "default_clock": "2026-03-14T10:10:00.000Z",
+  "log_sampling_note": "Checkout flow logs are sampled at 10%; each sampled checkout is correlated by request_id. The payment-service error-rate metric is computed from the same sampled checkout population.",
+  "allowed_actions": [
+    {
+      "action_id": "R1",
+      "label": "Disable feature flag coupon.enabled",
+      "risk": "low",
+      "outcome": "after_flag_disable"
+    },
+    {
+      "action_id": "R2",
+      "label": "Roll back payment-service to v1.7.4 using RB-PAY-174",
+      "risk": "medium",
+      "outcome": "after_rollback"
+    },
+    {
+      "action_id": "R3",
+      "label": "Scale up postgres-payments",
+      "risk": "high",
+      "outcome": "after_scale_db"
+    },
+    {
+      "action_id": "R4",
+      "label": "Restart payment-service pods",
+      "risk": "medium",
+      "outcome": "after_restart_pods"
+    },
+    {
+      "action_id": "R5",
+      "label": "Scale payment-service from 4 to 8 pods",
+      "risk": "high",
+      "outcome": "after_scale_payment"
+    },
+    {
+      "action_id": "R6",
+      "label": "Take no action",
+      "risk": "none",
+      "outcome": "no_action"
+    }
+  ]
+}

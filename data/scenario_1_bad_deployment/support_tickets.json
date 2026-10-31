@@ -1,0 +1,324 @@
+{
+  "tickets": [
+    {
+      "id": "TKT-001",
+      "ts": "2026-03-14T10:03:11.000Z",
+      "customer_tier": "silver",
+      "channel": "chat",
+      "text": "The app sends me back to the cart after I tap Pay.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-002",
+      "ts": "2026-03-14T10:04:05.000Z",
+      "customer_tier": "gold",
+      "channel": "chat",
+      "text": "The payment screen spins and then returns an error.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-003",
+      "ts": "2026-03-14T10:05:39.000Z",
+      "customer_tier": "gold",
+      "channel": "app",
+      "text": "The payment step is failing for multiple items in my cart.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-004",
+      "ts": "2026-03-14T10:06:47.000Z",
+      "customer_tier": "standard",
+      "channel": "email",
+      "text": "The order confirmation page never appears after payment.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-005",
+      "ts": "2026-03-14T10:07:30.000Z",
+      "customer_tier": "silver",
+      "channel": "chat",
+      "text": "The checkout button returns an error instead of confirming.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-006",
+      "ts": "2026-03-14T10:08:45.000Z",
+      "customer_tier": "standard",
+      "channel": "app",
+      "text": "It worked when I just skipped the promo box.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-007",
+      "ts": "2026-03-14T10:09:12.000Z",
+      "customer_tier": "gold",
+      "channel": "app",
+      "text": "Checkout fails after I confirm the payment method.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-008",
+      "ts": "2026-03-14T10:03:24.000Z",
+      "customer_tier": "gold",
+      "channel": "app",
+      "text": "I cannot finish placing an order; it says payment failed.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-009",
+      "ts": "2026-03-14T10:04:12.000Z",
+      "customer_tier": "standard",
+      "channel": "chat",
+      "text": "Payment looks successful for a moment, then the order fails.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-010",
+      "ts": "2026-03-14T10:05:30.000Z",
+      "customer_tier": "gold",
+      "channel": "app",
+      "text": "I cannot finish placing an order; it says payment failed.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-011",
+      "ts": "2026-03-14T10:06:34.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "I tried again and got the same payment error.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-012",
+      "ts": "2026-03-14T10:07:44.000Z",
+      "customer_tier": "gold",
+      "channel": "email",
+      "text": "I cannot finish placing an order; it says payment failed.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-013",
+      "ts": "2026-03-14T10:08:15.000Z",
+      "customer_tier": "standard",
+      "channel": "email",
+      "text": "The app sends me back to the cart after I tap Pay.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-014",
+      "ts": "2026-03-14T10:09:29.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "The payment screen spins and then returns an error.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-015",
+      "ts": "2026-03-14T10:03:39.000Z",
+      "customer_tier": "standard",
+      "channel": "chat",
+      "text": "The app sends me back to the cart after I tap Pay.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-016",
+      "ts": "2026-03-14T10:04:23.000Z",
+      "customer_tier": "standard",
+      "channel": "app",
+      "text": "The payment screen spins and then returns an error.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-017",
+      "ts": "2026-03-14T10:05:48.000Z",
+      "customer_tier": "gold",
+      "channel": "email",
+      "text": "The app sends me back to the cart after I tap Pay.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-018",
+      "ts": "2026-03-14T10:06:22.000Z",
+      "customer_tier": "silver",
+      "channel": "chat",
+      "text": "Only fails after I tap the promo code field and leave it blank.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-019",
+      "ts": "2026-03-14T10:07:44.000Z",
+      "customer_tier": "gold",
+      "channel": "chat",
+      "text": "The app sends me back to the cart after I tap Pay.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-020",
+      "ts": "2026-03-14T10:08:12.000Z",
+      "customer_tier": "standard",
+      "channel": "chat",
+      "text": "The payment screen spins and then returns an error.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-021",
+      "ts": "2026-03-14T10:09:13.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "The app sends me back to the cart after I tap Pay.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-022",
+      "ts": "2026-03-14T10:03:12.000Z",
+      "customer_tier": "gold",
+      "channel": "email",
+      "text": "The app sends me back to the cart after I tap Pay.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-023",
+      "ts": "2026-03-14T10:04:49.000Z",
+      "customer_tier": "silver",
+      "channel": "chat",
+      "text": "I cannot finish placing an order; it says payment failed.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-024",
+      "ts": "2026-03-14T10:05:27.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "The order confirmation page never appears after payment.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-025",
+      "ts": "2026-03-14T10:06:53.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "If I do not open the promo section, checkout goes through.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-026",
+      "ts": "2026-03-14T10:07:03.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "The payment screen spins and then returns an error.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-027",
+      "ts": "2026-03-14T10:08:30.000Z",
+      "customer_tier": "standard",
+      "channel": "email",
+      "text": "I tried again and got the same payment error.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-028",
+      "ts": "2026-03-14T10:09:00.000Z",
+      "customer_tier": "standard",
+      "channel": "email",
+      "text": "The payment screen spins and then returns an error.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-029",
+      "ts": "2026-03-14T10:03:55.000Z",
+      "customer_tier": "gold",
+      "channel": "app",
+      "text": "My delivery tracking has not updated.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-030",
+      "ts": "2026-03-14T10:04:05.000Z",
+      "customer_tier": "standard",
+      "channel": "app",
+      "text": "I cannot reset my password.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-031",
+      "ts": "2026-03-14T10:05:55.000Z",
+      "customer_tier": "gold",
+      "channel": "chat",
+      "text": "My delivery tracking has not updated.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-032",
+      "ts": "2026-03-14T10:06:18.000Z",
+      "customer_tier": "standard",
+      "channel": "email",
+      "text": "I did not receive the promotional email.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-033",
+      "ts": "2026-03-14T10:07:50.000Z",
+      "customer_tier": "silver",
+      "channel": "email",
+      "text": "The item arrived in the wrong size.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-034",
+      "ts": "2026-03-14T10:08:48.000Z",
+      "customer_tier": "silver",
+      "channel": "email",
+      "text": "The item arrived in the wrong size.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-035",
+      "ts": "2026-03-14T10:09:36.000Z",
+      "customer_tier": "silver",
+      "channel": "email",
+      "text": "The item arrived in the wrong size.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-036",
+      "ts": "2026-03-14T10:03:56.000Z",
+      "customer_tier": "standard",
+      "channel": "email",
+      "text": "I cannot reset my password.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-037",
+      "ts": "2026-03-14T10:04:02.000Z",
+      "customer_tier": "standard",
+      "channel": "app",
+      "text": "I did not receive the promotional email.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-038",
+      "ts": "2026-03-14T10:05:26.000Z",
+      "customer_tier": "standard",
+      "channel": "app",
+      "text": "I cannot reset my password.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-039",
+      "ts": "2026-03-14T10:06:32.000Z",
+      "customer_tier": "silver",
+      "channel": "email",
+      "text": "My delivery tracking has not updated.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-040",
+      "ts": "2026-03-14T10:07:27.000Z",
+      "customer_tier": "silver",
+      "channel": "email",
+      "text": "I cannot reset my password.",
+      "priority": "low"
+    }
+  ]
+}

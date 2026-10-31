@@ -1,0 +1,62 @@
+{
+  "incidents": [
+    {
+      "id": "INC-1850",
+      "date": "2025-11-02",
+      "title": "Login failures",
+      "root_cause": "Expired certificate on auth-service",
+      "fix": "Certificate renewal",
+      "time_to_resolve_min": 40,
+      "services": [
+        "auth-service",
+        "api-gateway"
+      ]
+    },
+    {
+      "id": "INC-1987",
+      "date": "2025-12-09",
+      "title": "payment-service 500s after a deploy",
+      "root_cause": "Code regression (null field not handled in a new feature)",
+      "fix": "Rollback",
+      "time_to_resolve_min": 14,
+      "services": [
+        "payment-service"
+      ]
+    },
+    {
+      "id": "INC-2041",
+      "date": "2026-01-21",
+      "title": "payment-service checkout timeouts",
+      "root_cause": "db.pool.maxSize set too low",
+      "fix": "Config revert",
+      "time_to_resolve_min": 31,
+      "services": [
+        "payment-service",
+        "postgres-payments"
+      ]
+    },
+    {
+      "id": "INC-2103",
+      "date": "2026-02-14",
+      "title": "Checkout slowness during a sale",
+      "root_cause": "Genuine traffic spike",
+      "fix": "Autoscaling",
+      "time_to_resolve_min": 22,
+      "services": [
+        "order-service",
+        "payment-service"
+      ]
+    },
+    {
+      "id": "INC-2180",
+      "date": "2026-03-02",
+      "title": "order-service errors after a deploy",
+      "root_cause": "Misconfigured Kafka topic name",
+      "fix": "Config correction",
+      "time_to_resolve_min": 26,
+      "services": [
+        "order-service"
+      ]
+    }
+  ]
+}

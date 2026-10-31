@@ -1,0 +1,254 @@
+{
+  "root_cause": "The 2026-03-14 payment-service v1.8.0 release enabled coupon handling. For roughly 40% of checkout requests, the frontend supplied couponCode as an empty string. CouponService.applyCoupon passed that empty string to CouponRepository.findByCode, received null, and dereferenced getPercent(), producing a NullPointerException and HTTP 500. The order-service retry cascade then produced PaymentFailedException and api-gateway 502 responses. Requests without the field and requests with valid coupon codes continued to succeed.",
+  "root_cause_evidence_ids": [
+    "DEP-001",
+    "CFG-001",
+    "LOG-031632",
+    "LOG-031695",
+    "LOG-031733",
+    "LOG-032044",
+    "LOG-032181",
+    "LOG-031652",
+    "LOG-031703",
+    "LOG-031747",
+    "LOG-031653",
+    "LOG-031704",
+    "LOG-031748",
+    "INJ-001",
+    "INJ-002",
+    "INC-1987"
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "title": "payment-service v1.8.0 code bug",
+      "truth": true,
+      "supporting_ids": [
+        "DEP-001",
+        "CFG-001",
+        "LOG-031632",
+        "LOG-031695",
+        "LOG-031733",
+        "LOG-032044",
+        "LOG-032181",
+        "INJ-001",
+        "INJ-002",
+        "INC-1987"
+      ],
+      "contradicting_ids": [],
+      "expected_confidence_before_injection": 0.88,
+      "expected_confidence_after_injection": 0.99
+    },
+    {
+      "id": "H2",
+      "title": "Database problem",
+      "truth": false,
+      "supporting_ids": [
+        "INC-2041"
+      ],
+      "contradicting_ids": [
+        "MET-DB-CPU_PERCENT",
+        "MET-DB-ACTIVE_CONNECTIONS",
+        "TRC-0227",
+        "TRC-0234",
+        "TRC-0235",
+        "TRC-0237"
+      ],
+      "expected_confidence_before_injection": 0.2,
+      "expected_confidence_after_injection": 0.01
+    },
+    {
+      "id": "H3",
+      "title": "Traffic spike",
+      "truth": false,
+      "supporting_ids": [
+        "INC-2103"
+      ],
+      "contradicting_ids": [
+        "MET-PAY-REQUEST_RATE_PER_MIN"
+      ],
+      "expected_confidence_before_injection": 0.15,
+      "expected_confidence_after_injection": 0.01
+    },
+    {
+      "id": "H4",
+      "title": "notification-service deployment",
+      "truth": false,
+      "supporting_ids": [
+        "DEP-002",
+        "ALT-001"
+      ],
+      "contradicting_ids": [
+        "DEP-001",
+        "ALT-004"
+      ],
+      "expected_confidence_before_injection": 0.2,
+      "expected_confidence_after_injection": 0.01
+    },
+    {
+      "id": "H5",
+      "title": "Redis/inventory latency",
+      "truth": false,
+      "supporting_ids": [
+        "ALT-002"
+      ],
+      "contradicting_ids": [
+        "ALT-002",
+        "TRC-0227",
+        "TRC-0234",
+        "TRC-0235"
+      ],
+      "expected_confidence_before_injection": 0.2,
+      "expected_confidence_after_injection": 0.01
+    },
+    {
+      "id": "H6",
+      "title": "Infrastructure or node problem",
+      "truth": false,
+      "supporting_ids": [
+        "ALT-003"
+      ],
+      "contradicting_ids": [
+        "MET-NODE-3-CPU",
+        "INF-000007",
+        "INF-000008",
+        "INF-000009"
+      ],
+      "expected_confidence_before_injection": 0.2,
+      "expected_confidence_after_injection": 0.01
+    }
+  ],
+  "expected_timeline": [
+    {
+      "ts": "2026-03-14T09:15:00.000Z",
+      "event": "notification-service v3.2.1 deployment and queue-depth decoy begin",
+      "evidence_ids": [
+        "DEP-002",
+        "ALT-001"
+      ]
+    },
+    {
+      "ts": "2026-03-14T09:30:00.000Z",
+      "event": "auth-service session timeout configuration changes",
+      "evidence_ids": [
+        "CFG-002"
+      ]
+    },
+    {
+      "ts": "2026-03-14T10:02:10.000Z",
+      "event": "payment-service v1.8.0 deployment and coupon flag activation",
+      "evidence_ids": [
+        "DEP-001",
+        "CFG-001"
+      ]
+    },
+    {
+      "ts": "2026-03-14T10:02:41.000Z",
+      "event": "first new payment-service pod becomes Ready",
+      "evidence_ids": [
+        "INF-000001"
+      ]
+    },
+    {
+      "ts": "2026-03-14T10:03:05.025Z",
+      "event": "first payment-service NullPointerException",
+      "evidence_ids": [
+        "LOG-031632"
+      ]
+    },
+    {
+      "ts": "2026-03-14T10:06:30.000Z",
+      "event": "payment-service HighErrorRate alert fires",
+      "evidence_ids": [
+        "ALT-004"
+      ]
+    }
+  ],
+  "expected_impact": {
+    "services": [
+      "payment-service",
+      "order-service",
+      "api-gateway"
+    ],
+    "error_rate_peak": "about 38-42% after rollout",
+    "estimated_failed_checkouts": 4230,
+    "affected_users_note": "Requests with an empty couponCode failed quickly; requests without the field and valid coupon codes continued to succeed."
+  },
+  "remediation_options": [
+    {
+      "id": "R1",
+      "title": "Disable feature flag coupon.enabled",
+      "risk": "low",
+      "requires_approval": false,
+      "is_correct": true,
+      "verification_outcome": "after_flag_disable",
+      "why": "Disabling the flag prevents the failing coupon path and takes effect without restarting pods."
+    },
+    {
+      "id": "R2",
+      "title": "Roll back payment-service to v1.7.4",
+      "risk": "medium",
+      "requires_approval": true,
+      "is_correct": true,
+      "verification_outcome": "after_rollback",
+      "why": "The previous image removes the newly introduced coupon code path."
+    },
+    {
+      "id": "R3",
+      "title": "Scale up postgres-payments",
+      "risk": "high",
+      "requires_approval": true,
+      "is_correct": false,
+      "verification_outcome": "after_scale_db",
+      "why": "Failed requests do not reach Postgres and its resource metrics remain healthy."
+    },
+    {
+      "id": "R4",
+      "title": "Restart payment-service pods",
+      "risk": "medium",
+      "requires_approval": true,
+      "is_correct": false,
+      "verification_outcome": "after_restart_pods",
+      "why": "A restart does not change the faulty application code or feature flag."
+    },
+    {
+      "id": "R5",
+      "title": "Scale payment-service from 4 to 8 pods",
+      "risk": "high",
+      "requires_approval": true,
+      "is_correct": false,
+      "verification_outcome": "after_scale_payment",
+      "why": "Additional replicas run the same code path and do not prevent the exception."
+    }
+  ],
+  "smoking_gun_queries": [
+    {
+      "tool": "search_logs",
+      "args": {
+        "service": "payment-service",
+        "message_contains": "CouponRepository.findByCode",
+        "time_from": "2026-03-14T10:03:00.000Z",
+        "time_to": "2026-03-14T10:10:00.000Z"
+      },
+      "expected_result": "Payment-service 1.8.0 emits NullPointerException records with couponCode present and empty; each failed request has correlated order-service retries and gateway 502."
+    },
+    {
+      "tool": "search_traces",
+      "args": {
+        "status": "ERROR",
+        "time_from": "2026-03-14T10:03:00.000Z",
+        "time_to": "2026-03-14T10:10:00.000Z"
+      },
+      "expected_result": "Failed checkout traces stop in payment-service and contain no postgres-payments span; healthy checkout traces do include Postgres."
+    },
+    {
+      "tool": "get_deployment_and_config_history",
+      "args": {
+        "service": "payment-service",
+        "time": "2026-03-14T10:02:10.000Z"
+      },
+      "expected_result": "DEP-001 rolls 1.7.4 to 1.8.0 and CFG-001 enables coupon.enabled at the same timestamp."
+    }
+  ],
+  "expected_verification": "Disabling coupon.enabled at 10:12 should reduce errors below 1% by 10:14. Alternatively, rolling payment-service back to v1.7.4 should complete around 10:15:10 and reduce errors below 1% by 10:17. Database scaling, pod restarts, and replica scaling should not resolve the failures."
+}
