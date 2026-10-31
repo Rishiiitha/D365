@@ -1,0 +1,79 @@
+{
+  "first_npe_log_id": "LOG-031161",
+  "first_failing_trace_id": "TRC-000228",
+  "last_healthy_postgres_trace_before_incident": "TRC-000222",
+  "ids_of_rolling_update_infra_events": [
+    "INF-001596",
+    "INF-001597",
+    "INF-001607",
+    "INF-001608",
+    "INF-001627",
+    "INF-001628",
+    "INF-001632",
+    "INF-001639",
+    "INF-001640",
+    "INF-001644",
+    "INF-001653",
+    "INF-001654",
+    "INF-001655",
+    "INF-001656",
+    "INF-001657",
+    "INF-001658",
+    "INF-001659",
+    "INF-001663"
+  ],
+  "ids_of_each_decoy_event": {
+    "notification_queue": [
+      "LOG-007463",
+      "LOG-008408",
+      "LOG-009353",
+      "LOG-010352",
+      "LOG-011245",
+      "LOG-012233",
+      "LOG-013208",
+      "LOG-014151",
+      "LOG-015165",
+      "LOG-016189"
+    ],
+    "redis_latency": [
+      "LOG-024551",
+      "LOG-025016",
+      "LOG-025517",
+      "LOG-026023",
+      "LOG-026527",
+      "LOG-027025",
+      "LOG-027526",
+      "LOG-028020",
+      "LOG-028518",
+      "LOG-028519"
+    ],
+    "auth_session_change": [
+      "LOG-014653"
+    ],
+    "node3_batch_cpu": [
+      "INF-001397",
+      "INF-001528"
+    ],
+    "node2_disk_pressure": [
+      "INF-001021",
+      "INF-001216"
+    ],
+    "node2_eviction": [
+      "INF-001116"
+    ],
+    "cron_image_pull": [
+      "INF-001098",
+      "INF-001195"
+    ]
+  },
+  "count_of_failed_checkouts_10_03_to_10_30": 394,
+  "count_of_successful_checkouts_in_same_window": 706,
+  "percent_failed_with_empty_coupon": 100.0,
+  "total_lines_per_file": {
+    "application_logs.jsonl": 44020,
+    "infra_logs.jsonl": 2225,
+    "traces.jsonl": 400,
+    "metrics.json": 71,
+    "verification_metrics.json": 3
+  }
+}

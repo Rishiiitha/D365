@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+phase*_report.json
+phase*_summary.json
+*_audit.jsonl
+phase3_*.json
+report.json
+*_report.json
+evaluation.json
+demo_report.json
