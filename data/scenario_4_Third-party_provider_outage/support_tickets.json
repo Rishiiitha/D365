@@ -1,0 +1,362 @@
+[
+  {
+    "id": "TKT-0001",
+    "created_at": "2026-03-16T10:14:16.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Product pages are slow and spinner stays visible",
+    "description": "Product pages are slow and spinner stays visible. Reported by customer support; impact appears intermittent.",
+    "status": "in_progress"
+  },
+  {
+    "id": "TKT-0002",
+    "created_at": "2026-03-16T10:17:42.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Product detail pages taking longer to load",
+    "description": "Product detail pages taking longer to load. Reported by customer support; impact appears intermittent.",
+    "status": "in_progress"
+  },
+  {
+    "id": "TKT-0003",
+    "created_at": "2026-03-16T10:23:01.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Search results occasionally pause before stock appears",
+    "description": "Search results occasionally pause before stock appears. Reported by customer support; impact appears intermittent.",
+    "status": "triaged"
+  },
+  {
+    "id": "TKT-0004",
+    "created_at": "2026-03-16T10:13:04.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Product pages feel sluggish since this morning",
+    "description": "Product pages feel sluggish since this morning. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0005",
+    "created_at": "2026-03-16T10:34:13.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Stock badge takes a long time to refresh",
+    "description": "Stock badge takes a long time to refresh. Reported by customer support; impact appears intermittent.",
+    "status": "triaged"
+  },
+  {
+    "id": "TKT-0006",
+    "created_at": "2026-03-16T10:08:54.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Product page spinner appears intermittently",
+    "description": "Product page spinner appears intermittently. Reported by customer support; impact appears intermittent.",
+    "status": "in_progress"
+  },
+  {
+    "id": "TKT-0007",
+    "created_at": "2026-03-16T10:14:17.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Inventory lookup seems slower than yesterday",
+    "description": "Inventory lookup seems slower than yesterday. Reported by customer support; impact appears intermittent.",
+    "status": "in_progress"
+  },
+  {
+    "id": "TKT-0008",
+    "created_at": "2026-03-16T10:02:01.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Product page loads but availability is delayed",
+    "description": "Product page loads but availability is delayed. Reported by customer support; impact appears intermittent.",
+    "status": "triaged"
+  },
+  {
+    "id": "TKT-0009",
+    "created_at": "2026-03-16T10:06:07.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Some product pages take several seconds",
+    "description": "Some product pages take several seconds. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0010",
+    "created_at": "2026-03-16T10:01:59.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Catalog pages are slow when opening variants",
+    "description": "Catalog pages are slow when opening variants. Reported by customer support; impact appears intermittent.",
+    "status": "in_progress"
+  },
+  {
+    "id": "TKT-0011",
+    "created_at": "2026-03-16T10:53:52.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Product detail latency has crept up",
+    "description": "Product detail latency has crept up. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0012",
+    "created_at": "2026-03-16T10:47:35.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Stock availability widget is slow",
+    "description": "Stock availability widget is slow. Reported by customer support; impact appears intermittent.",
+    "status": "triaged"
+  },
+  {
+    "id": "TKT-0013",
+    "created_at": "2026-03-16T10:41:33.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Pages get slower after the morning deploy",
+    "description": "Pages get slower after the morning deploy. Reported by customer support; impact appears intermittent. A second attempt sometimes works, but the first attempt can wait noticeably longer.",
+    "status": "in_progress"
+  },
+  {
+    "id": "TKT-0014",
+    "created_at": "2026-03-16T10:47:14.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Inventory requests sometimes take unusually long",
+    "description": "Inventory requests sometimes take unusually long. Reported by customer support; impact appears intermittent.",
+    "status": "triaged"
+  },
+  {
+    "id": "TKT-0015",
+    "created_at": "2026-03-16T10:38:35.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Product pages show delayed stock status",
+    "description": "Product pages show delayed stock status. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0016",
+    "created_at": "2026-03-16T10:41:03.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Product lookup latency rising gradually",
+    "description": "Product lookup latency rising gradually. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0017",
+    "created_at": "2026-03-16T10:38:37.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Product page spinner persists on refresh",
+    "description": "Product page spinner persists on refresh. Reported by customer support; impact appears intermittent.",
+    "status": "triaged"
+  },
+  {
+    "id": "TKT-0018",
+    "created_at": "2026-03-16T10:38:37.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Product details intermittently time out",
+    "description": "Product details intermittently time out. Reported by customer support; impact appears intermittent.",
+    "status": "triaged"
+  },
+  {
+    "id": "TKT-0019",
+    "created_at": "2026-03-16T10:41:42.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Unable to check stock",
+    "description": "Unable to check stock. Reported by customer support; impact appears intermittent. A second attempt sometimes works, but the first attempt can wait noticeably longer.",
+    "status": "triaged"
+  },
+  {
+    "id": "TKT-0020",
+    "created_at": "2026-03-16T10:48:39.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Unable to check stock for multiple SKUs",
+    "description": "Unable to check stock for multiple SKUs. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0021",
+    "created_at": "2026-03-16T10:42:40.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Cart randomly fails to add item",
+    "description": "Cart randomly fails to add item. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0022",
+    "created_at": "2026-03-16T10:53:24.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Cart add-to-cart fails intermittently",
+    "description": "Cart add-to-cart fails intermittently. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0023",
+    "created_at": "2026-03-16T10:43:03.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Stock check fails during cart update",
+    "description": "Stock check fails during cart update. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0024",
+    "created_at": "2026-03-16T10:41:33.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Unable to check stock after retry",
+    "description": "Unable to check stock after retry. Reported by customer support; impact appears intermittent. A second attempt sometimes works, but the first attempt can wait noticeably longer.",
+    "status": "triaged"
+  },
+  {
+    "id": "TKT-0025",
+    "created_at": "2026-03-16T10:46:12.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Cart randomly fails to add item for some users",
+    "description": "Cart randomly fails to add item for some users. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0026",
+    "created_at": "2026-03-16T10:50:31.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Inventory availability endpoint unavailable",
+    "description": "Inventory availability endpoint unavailable. Reported by customer support; impact appears intermittent.",
+    "status": "in_progress"
+  },
+  {
+    "id": "TKT-0027",
+    "created_at": "2026-03-16T10:46:08.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Checkout fails when validating stock",
+    "description": "Checkout fails when validating stock. Reported by customer support; impact appears intermittent.",
+    "status": "in_progress"
+  },
+  {
+    "id": "TKT-0028",
+    "created_at": "2026-03-16T10:38:06.000Z",
+    "category": "product_experience",
+    "service": "inventory-service",
+    "subject": "Stock validation returns service unavailable",
+    "description": "Stock validation returns service unavailable. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0029",
+    "created_at": "2026-03-16T10:47:48.000Z",
+    "category": "unrelated",
+    "service": "notification-service",
+    "subject": "Password reset email delayed",
+    "description": "Password reset email delayed. Reported by customer support; impact appears intermittent.",
+    "status": "in_progress"
+  },
+  {
+    "id": "TKT-0030",
+    "created_at": "2026-03-16T09:19:34.000Z",
+    "category": "unrelated",
+    "service": "auth-service",
+    "subject": "Invoice PDF download returns 404",
+    "description": "Invoice PDF download returns 404. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0031",
+    "created_at": "2026-03-16T09:39:42.000Z",
+    "category": "unrelated",
+    "service": "notification-service",
+    "subject": "Mobile menu overlaps footer",
+    "description": "Mobile menu overlaps footer. Reported by customer support; impact appears intermittent.",
+    "status": "in_progress"
+  },
+  {
+    "id": "TKT-0032",
+    "created_at": "2026-03-16T09:51:51.000Z",
+    "category": "unrelated",
+    "service": "web-frontend",
+    "subject": "Promo banner image missing",
+    "description": "Promo banner image missing. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0033",
+    "created_at": "2026-03-16T10:16:18.000Z",
+    "category": "unrelated",
+    "service": "auth-service",
+    "subject": "Wishlist count not updating",
+    "description": "Wishlist count not updating. Reported by customer support; impact appears intermittent.",
+    "status": "triaged"
+  },
+  {
+    "id": "TKT-0034",
+    "created_at": "2026-03-16T10:28:16.000Z",
+    "category": "unrelated",
+    "service": "notification-service",
+    "subject": "Search typo suggestion looks wrong",
+    "description": "Search typo suggestion looks wrong. Reported by customer support; impact appears intermittent.",
+    "status": "triaged"
+  },
+  {
+    "id": "TKT-0035",
+    "created_at": "2026-03-16T08:47:00.000Z",
+    "category": "unrelated",
+    "service": "notification-service",
+    "subject": "SMS delivery receipt delayed",
+    "description": "SMS delivery receipt delayed. Reported by customer support; impact appears intermittent.",
+    "status": "in_progress"
+  },
+  {
+    "id": "TKT-0036",
+    "created_at": "2026-03-16T08:49:26.000Z",
+    "category": "unrelated",
+    "service": "notification-service",
+    "subject": "Profile avatar upload slow",
+    "description": "Profile avatar upload slow. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0037",
+    "created_at": "2026-03-16T08:31:00.000Z",
+    "category": "unrelated",
+    "service": "web-frontend",
+    "subject": "Currency selector resets",
+    "description": "Currency selector resets. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0038",
+    "created_at": "2026-03-16T08:44:29.000Z",
+    "category": "unrelated",
+    "service": "notification-service",
+    "subject": "Order history filter issue",
+    "description": "Order history filter issue. Reported by customer support; impact appears intermittent.",
+    "status": "triaged"
+  },
+  {
+    "id": "TKT-0039",
+    "created_at": "2026-03-16T09:28:40.000Z",
+    "category": "unrelated",
+    "service": "auth-service",
+    "subject": "Footer link points to old page",
+    "description": "Footer link points to old page. Reported by customer support; impact appears intermittent.",
+    "status": "open"
+  },
+  {
+    "id": "TKT-0040",
+    "created_at": "2026-03-16T10:12:21.000Z",
+    "category": "unrelated",
+    "service": "notification-service",
+    "subject": "Marketing email unsubscribe request",
+    "description": "Marketing email unsubscribe request. Reported by customer support; impact appears intermittent.",
+    "status": "triaged"
+  }
+]

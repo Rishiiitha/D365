@@ -1,0 +1,294 @@
+{
+  "root_cause": "Inventory-service v2.1.0 introduced an unbounded in-memory ProductLookupCache backed by ConcurrentHashMap, keyed by productId plus requestId, with no maximumSize, TTL, or eviction. The feature flag inventory.local_cache.enabled was enabled at 08:32. The cache grows on each lookup, producing a near-linear per-pod memory increase independent of flat request volume. Heap pressure drives longer GC pauses and latency, followed by OOMKilled restarts and a restart loop. The memory limit remained 1Gi and node neighbours remained stable; Redis calls per request fell, showing the cache feature was active.",
+  "root_cause_evidence_ids": [
+    "DEP-001",
+    "CFG-001",
+    "LOG-007722",
+    "LOG-007723",
+    "LOG-007724",
+    "LOG-007947",
+    "LOG-007948",
+    "LOG-007949",
+    "LOG-000430",
+    "LOG-001147",
+    "LOG-002305",
+    "LOG-003172",
+    "LOG-003385",
+    "LOG-004107",
+    "LOG-004305",
+    "LOG-004327",
+    "LOG-035817",
+    "LOG-036882",
+    "LOG-037942",
+    "LOG-039226",
+    "TRC-0264",
+    "TRC-0273",
+    "TRC-0277",
+    "TRC-0286",
+    "TRC-0298",
+    "INJ-001",
+    "INJ-002"
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "title": "Memory leak in inventory-service v2.1.0",
+      "truth": true,
+      "supporting_ids": [
+        "DEP-001",
+        "CFG-001",
+        "LOG-007722",
+        "LOG-007723",
+        "LOG-007724",
+        "LOG-007947",
+        "LOG-000430",
+        "LOG-001147",
+        "LOG-002305",
+        "LOG-003172",
+        "LOG-035817",
+        "LOG-036882",
+        "LOG-037942",
+        "LOG-039226",
+        "INJ-001",
+        "INJ-002"
+      ],
+      "contradicting_ids": [],
+      "expected_confidence_before_injection": 0.88,
+      "expected_confidence_after_injection": 0.99
+    },
+    {
+      "id": "H2",
+      "title": "Traffic spike caused memory growth",
+      "truth": false,
+      "supporting_ids": [
+        "MET-INV-REQUEST"
+      ],
+      "contradicting_ids": [
+        "MET-INV-REQUEST",
+        "MET-NODE-1-MEM"
+      ],
+      "expected_confidence_before_injection": 0.18,
+      "expected_confidence_after_injection": 0.01
+    },
+    {
+      "id": "H3",
+      "title": "Node out of memory",
+      "truth": false,
+      "supporting_ids": [
+        "INF-001589",
+        "INF-001589",
+        "INF-001603"
+      ],
+      "contradicting_ids": [
+        "MET-NODE-1-MEM",
+        "MET-NODE-2-MEM",
+        "MET-NODE-3-MEM"
+      ],
+      "expected_confidence_before_injection": 0.22,
+      "expected_confidence_after_injection": 0.01
+    },
+    {
+      "id": "H4",
+      "title": "Order-service v2.3.1 deployment caused the issue",
+      "truth": false,
+      "supporting_ids": [
+        "DEP-002"
+      ],
+      "contradicting_ids": [
+        "DEP-001",
+        "MET-INV-MEM-1"
+      ],
+      "expected_confidence_before_injection": 0.2,
+      "expected_confidence_after_injection": 0.01
+    },
+    {
+      "id": "H5",
+      "title": "Redis memory problem caused inventory failures",
+      "truth": false,
+      "supporting_ids": [
+        "LOG-018062",
+        "LOG-018284",
+        "LOG-018512"
+      ],
+      "contradicting_ids": [
+        "MET-REDIS-MEM",
+        "MET-INV-REDIS-CALLS"
+      ],
+      "expected_confidence_before_injection": 0.25,
+      "expected_confidence_after_injection": 0.01
+    },
+    {
+      "id": "H6",
+      "title": "Inventory memory limit is too low",
+      "truth": false,
+      "supporting_ids": [
+        "INC-2210"
+      ],
+      "contradicting_ids": [
+        "DEP-001",
+        "MET-INV-REQUEST",
+        "LOG-007722",
+        "LOG-007723"
+      ],
+      "expected_confidence_before_injection": 0.35,
+      "expected_confidence_after_injection": 0.04
+    }
+  ],
+  "expected_timeline": [
+    {
+      "ts": "2026-03-16T08:32:00.000Z",
+      "event": "Inventory v2.1.0 deployed and local cache flag enabled",
+      "evidence_ids": [
+        "DEP-001",
+        "CFG-001"
+      ]
+    },
+    {
+      "ts": "2026-03-16T10:00:00.000Z",
+      "event": "Heap crossed 80%; GC and latency begin deteriorating",
+      "evidence_ids": [
+        "LOG-007722",
+        "LOG-007723",
+        "LOG-000430",
+        "LOG-001147"
+      ]
+    },
+    {
+      "ts": "2026-03-16T10:15:00.000Z",
+      "event": "Full GC repeatedly reclaims only about 3%",
+      "evidence_ids": [
+        "LOG-002305",
+        "LOG-003172",
+        "LOG-003385"
+      ]
+    },
+    {
+      "ts": "2026-03-16T10:38:40.000Z",
+      "event": "First inventory pod OOMKilled",
+      "evidence_ids": [
+        "LOG-035817"
+      ]
+    },
+    {
+      "ts": "2026-03-16T10:43:10.000Z",
+      "event": "Second inventory pod OOMKilled",
+      "evidence_ids": [
+        "LOG-036882"
+      ]
+    },
+    {
+      "ts": "2026-03-16T10:47:30.000Z",
+      "event": "Third inventory pod OOMKilled",
+      "evidence_ids": [
+        "LOG-037942"
+      ]
+    },
+    {
+      "ts": "2026-03-16T10:52:50.000Z",
+      "event": "First pod OOMKilled again; restart backoff follows",
+      "evidence_ids": [
+        "LOG-039226",
+        "INF-002436"
+      ]
+    }
+  ],
+  "expected_impact": {
+    "services": [
+      "inventory-service",
+      "order-service",
+      "api-gateway"
+    ],
+    "estimated_pod_oom_events": 4,
+    "order_service_error_rate_during_restart_window": "10-18%",
+    "baseline_order_service_error_rate": "0.3%",
+    "note": "Inventory lookup latency degrades before the first restart; short restart windows cause intermittent stock checks and cart failures."
+  },
+  "remediation_options": [
+    {
+      "id": "R1",
+      "title": "Roll back inventory-service to v2.0.4 (RB-INV-204)",
+      "risk": "medium",
+      "requires_approval": true,
+      "is_correct": true,
+      "verification_outcome": "after_rollback",
+      "why": "Removes the newly introduced cache implementation; memory returns to about 44%, restarts stop and downstream errors normalize."
+    },
+    {
+      "id": "R2",
+      "title": "Disable inventory.local_cache.enabled and rolling restart",
+      "risk": "low",
+      "requires_approval": true,
+      "is_correct": true,
+      "verification_outcome": "after_flag_disable",
+      "why": "Disables the unbounded cache and replaces pods; equivalent mitigation without reverting the whole image."
+    },
+    {
+      "id": "R3",
+      "title": "Restart inventory pods only",
+      "risk": "low",
+      "requires_approval": true,
+      "is_correct": false,
+      "verification_outcome": "after_restart_only",
+      "why": "Only temporarily resets memory; the same cache fills again at the accelerated rate."
+    },
+    {
+      "id": "R4",
+      "title": "Raise memory limit from 1Gi to 2Gi",
+      "risk": "medium",
+      "requires_approval": true,
+      "is_correct": false,
+      "verification_outcome": "after_raise_limit",
+      "why": "Delays OOM but leaves unbounded growth in place."
+    },
+    {
+      "id": "R5",
+      "title": "Scale inventory replicas from 3 to 6",
+      "risk": "medium",
+      "requires_approval": true,
+      "is_correct": false,
+      "verification_outcome": "after_scale_replicas",
+      "why": "Adds capacity but does not remove the leak."
+    },
+    {
+      "id": "R6",
+      "title": "No action",
+      "risk": "none",
+      "requires_approval": false,
+      "is_correct": false,
+      "verification_outcome": "no_action",
+      "why": "OOM loop and downstream impact continue."
+    }
+  ],
+  "smoking_gun_queries": [
+    {
+      "tool": "search_metrics",
+      "args": {
+        "service": "inventory-service",
+        "metric": "memory_percent",
+        "group_by": "pod",
+        "from": "2026-03-16T08:35:00.000Z",
+        "to": "2026-03-16T10:38:00.000Z"
+      },
+      "expected_result": "All three inventory pods rise at roughly 0.42 percentage points per minute, despite flat lookup request rate."
+    },
+    {
+      "tool": "search_logs",
+      "args": {
+        "service": "inventory-service",
+        "message_contains": "Full GC",
+        "from": "2026-03-16T10:15:00.000Z",
+        "to": "2026-03-16T10:38:00.000Z"
+      },
+      "expected_result": "Full GC lines report only about 3% reclaimed, while heap and p99 latency continue increasing."
+    },
+    {
+      "tool": "get_deployment_and_code_diff",
+      "args": {
+        "deployment_id": "DEP-001",
+        "pull_request": "#517"
+      },
+      "expected_result": "v2.1.0 enables the local cache; PR #517 uses unbounded ConcurrentHashMap with no maximumSize, TTL, or eviction."
+    }
+  ],
+  "expected_verification": "Rollback to v2.0.4 at 10:58 should return pod memory to approximately 44% and keep it flat; restarts stop and order errors return to normal by 11:06. Disabling the feature flag with a rolling restart is an equally effective lower-risk alternative."
+}

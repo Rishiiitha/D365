@@ -1,0 +1,71 @@
+[
+  {
+    "id": "INC-1850",
+    "date": "2025-11-02",
+    "service": [
+      "auth-service",
+      "api-gateway"
+    ],
+    "summary": "login failures",
+    "root_cause": "expired certificate on auth-service",
+    "fix": "certificate renewal",
+    "duration_minutes": 40
+  },
+  {
+    "id": "INC-1987",
+    "date": "2025-12-09",
+    "service": [
+      "payment-service"
+    ],
+    "summary": "payment-service 500s after a deploy",
+    "root_cause": "code regression (null field not handled in a new feature)",
+    "fix": "rollback",
+    "duration_minutes": 14
+  },
+  {
+    "id": "INC-2041",
+    "date": "2026-01-21",
+    "service": [
+      "payment-service",
+      "postgres-payments"
+    ],
+    "summary": "payment-service checkout timeouts",
+    "root_cause": "db.pool.maxSize set too low",
+    "fix": "config revert",
+    "duration_minutes": 31
+  },
+  {
+    "id": "INC-2103",
+    "date": "2026-02-14",
+    "service": [
+      "order-service",
+      "payment-service"
+    ],
+    "summary": "checkout slowness during a sale",
+    "root_cause": "genuine traffic spike",
+    "fix": "autoscaling",
+    "duration_minutes": 22
+  },
+  {
+    "id": "INC-2090",
+    "date": "2026-01-08",
+    "service": [
+      "notification-service"
+    ],
+    "summary": "notification-service memory leak after deploy v3.0.0",
+    "root_cause": "memory leak introduced by deployment",
+    "fix": "rollback",
+    "duration_minutes": 25
+  },
+  {
+    "id": "INC-2210",
+    "date": "2026-03-02",
+    "service": [
+      "order-service"
+    ],
+    "summary": "order-service OOMKilled because memory limit too low after traffic growth",
+    "root_cause": "memory limit 512Mi too low",
+    "fix": "raise limit 512Mi -> 1Gi",
+    "duration_minutes": 18
+  }
+]
