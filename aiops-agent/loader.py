@@ -5,7 +5,8 @@ import math
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-RESERVED = {"key_evidence", "verification_metrics"}
+# Ground-truth keys and deferred evidence are never ingested into a normal run.
+RESERVED = {"key_evidence", "verification_metrics", "answer_key", "injected_evidence"}
 REQUIRED = {
     "application_logs": {"ts", "service", "pod", "node", "level", "message", "id"},
     "infra_logs": {"ts", "source", "node", "pod", "level", "message", "id"},
