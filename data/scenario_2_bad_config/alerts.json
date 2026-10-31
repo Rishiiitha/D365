@@ -1,0 +1,112 @@
+{
+  "alerts": [
+    {
+      "id": "ALT-001",
+      "ts": "2026-03-15T09:42:00.000Z",
+      "service": "postgres-payments",
+      "name": "PostgresAutovacuumLong",
+      "severity": "info",
+      "status": "resolved",
+      "resolved_at": "2026-03-15T09:47:00.000Z",
+      "condition": "Autovacuum ran longer than 5 minutes",
+      "current_value": "20ms query latency",
+      "dashboard_url": "https://monitor.shopkart.internal/d/postgres-payments/overview"
+    },
+    {
+      "id": "ALT-002",
+      "ts": "2026-03-15T10:03:20.000Z",
+      "service": "payment-service",
+      "name": "PaymentGatewayLatency",
+      "severity": "warning",
+      "status": "resolved",
+      "resolved_at": "2026-03-15T10:04:40.000Z",
+      "condition": "PayGate p95 latency > 500ms",
+      "current_value": "650ms",
+      "dashboard_url": "https://monitor.shopkart.internal/d/payment-service/overview"
+    },
+    {
+      "id": "ALT-003",
+      "ts": "2026-03-15T10:09:30.000Z",
+      "service": "payment-service",
+      "name": "HighLatency",
+      "severity": "warning",
+      "status": "firing",
+      "resolved_at": null,
+      "condition": "p99 latency > 5000ms",
+      "current_value": "p99 > 9s",
+      "dashboard_url": "https://monitor.shopkart.internal/d/payment-service/overview"
+    },
+    {
+      "id": "ALT-004",
+      "ts": "2026-03-15T10:11:30.000Z",
+      "service": "order-service",
+      "name": "HighErrorRate",
+      "severity": "critical",
+      "status": "firing",
+      "resolved_at": null,
+      "condition": "Order request error rate > 5%",
+      "current_value": "rising",
+      "dashboard_url": "https://monitor.shopkart.internal/d/order-service/overview"
+    },
+    {
+      "id": "ALT-005",
+      "ts": "2026-03-15T10:12:30.000Z",
+      "service": "api-gateway",
+      "name": "High5xxRate",
+      "severity": "critical",
+      "status": "firing",
+      "resolved_at": null,
+      "condition": "Gateway 5xx rate > 5%",
+      "current_value": "rising",
+      "dashboard_url": "https://monitor.shopkart.internal/d/api-gateway/overview"
+    },
+    {
+      "id": "ALT-006",
+      "ts": "2026-03-15T10:13:30.000Z",
+      "service": "checkout-success-rate",
+      "name": "CheckoutSLOBurn",
+      "severity": "critical",
+      "status": "firing",
+      "resolved_at": null,
+      "condition": "Checkout success rate below SLO",
+      "current_value": "degraded",
+      "dashboard_url": "https://monitor.shopkart.internal/d/checkout-success-rate/overview"
+    },
+    {
+      "id": "ALT-007",
+      "ts": "2026-03-15T09:30:00.000Z",
+      "service": "node-1",
+      "name": "NodeMemoryPressure",
+      "severity": "warning",
+      "status": "resolved",
+      "resolved_at": "2026-03-15T09:36:00.000Z",
+      "condition": "Node memory > 85%",
+      "current_value": "page cache",
+      "dashboard_url": "https://monitor.shopkart.internal/d/node-1/overview"
+    },
+    {
+      "id": "ALT-008",
+      "ts": "2026-03-15T09:25:00.000Z",
+      "service": "order-service",
+      "name": "DeploymentCompleted",
+      "severity": "info",
+      "status": "resolved",
+      "resolved_at": "2026-03-15T09:28:00.000Z",
+      "condition": "Deployment rollout completed",
+      "current_value": "2.3.1",
+      "dashboard_url": "https://monitor.shopkart.internal/d/order-service/overview"
+    },
+    {
+      "id": "ALT-009",
+      "ts": "2026-03-15T09:40:00.000Z",
+      "service": "postgres-payments",
+      "name": "AutovacuumActivity",
+      "severity": "info",
+      "status": "resolved",
+      "resolved_at": "2026-03-15T09:47:00.000Z",
+      "condition": "Autovacuum active",
+      "current_value": "completed",
+      "dashboard_url": "https://monitor.shopkart.internal/d/postgres-payments/overview"
+    }
+  ]
+}

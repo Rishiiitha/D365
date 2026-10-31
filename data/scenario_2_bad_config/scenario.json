@@ -1,0 +1,39 @@
+{
+  "id": "scenario_2_bad_config",
+  "folder": "scenario_2_bad_config",
+  "title": "Bad config change: DB connection pool too small",
+  "sidebar_label": "Bad config change",
+  "affected_service": "payment-service",
+  "severity": "critical",
+  "date": "2026-03-15",
+  "window_start": "2026-03-15T09:00:00.000Z",
+  "window_end": "2026-03-15T10:30:00.000Z",
+  "default_clock": "2026-03-15T10:20:00.000Z",
+  "log_sampling_note": "Checkout flow logs are sampled at 12%; all checkout records within the sampled population are correlated by request_id. Metrics use the same sampled checkout population for error-share agreement.",
+  "allowed_actions": [
+    {
+      "action_id": "R1",
+      "label": "Revert db.pool.maxSize from 5 to 50",
+      "risk": "medium",
+      "outcome": "after_config_revert"
+    },
+    {
+      "action_id": "R2",
+      "label": "Scale payment-service from 4 to 8 pods",
+      "risk": "high",
+      "outcome": "after_scale_pods"
+    },
+    {
+      "action_id": "R3",
+      "label": "Roll back payment-service image",
+      "risk": "medium",
+      "outcome": "after_image_rollback"
+    },
+    {
+      "action_id": "R4",
+      "label": "Scale up the database",
+      "risk": "high",
+      "outcome": "after_db_scale"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "evidence": [
+    {
+      "id": "INJ-001",
+      "ts": "2026-03-15T10:22:00.000Z",
+      "type": "config_diff",
+      "summary": "Config history diff for payment-service-config",
+      "details": {
+        "key": "db.pool.maxSize",
+        "old_value": "50",
+        "new_value": "5",
+        "author": "rahul.k",
+        "reason": "Reduce DB connections to cut RDS cost, OPS-1190",
+        "revision": "41 -> 42"
+      }
+    },
+    {
+      "id": "INJ-002",
+      "ts": "2026-03-15T10:23:00.000Z",
+      "type": "log_analysis",
+      "summary": "Connection acquisition wait analysis",
+      "details": {
+        "computed_after_10_05": {
+          "requests_waiting_over_5s": 571,
+          "requests": 1807
+        },
+        "before_10_05_wait_over_5s_percent": 0,
+        "p99_sql_execution_time_ms": 11
+      }
+    }
+  ]
+}

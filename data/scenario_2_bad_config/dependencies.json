@@ -1,0 +1,167 @@
+{
+  "services": [
+    {
+      "name": "web-frontend",
+      "type": "service",
+      "owner_team": "frontend-team",
+      "criticality": "high",
+      "current_version": "4.1.1",
+      "last_deployed": "2026-03-12T11:10:00.000Z",
+      "replicas": 3
+    },
+    {
+      "name": "api-gateway",
+      "type": "service",
+      "owner_team": "platform-team",
+      "criticality": "high",
+      "current_version": "4.4.2",
+      "last_deployed": "2026-03-12T11:10:00.000Z",
+      "replicas": 3
+    },
+    {
+      "name": "auth-service",
+      "type": "service",
+      "owner_team": "platform-team",
+      "criticality": "high",
+      "current_version": "1.9.3",
+      "last_deployed": "2026-03-12T11:10:00.000Z",
+      "replicas": 2
+    },
+    {
+      "name": "order-service",
+      "type": "service",
+      "owner_team": "orders-team",
+      "criticality": "high",
+      "current_version": "2.3.1",
+      "last_deployed": "2026-03-15T09:25:00.000Z",
+      "replicas": 4
+    },
+    {
+      "name": "payment-service",
+      "type": "service",
+      "owner_team": "payments-team",
+      "criticality": "high",
+      "current_version": "1.7.4",
+      "last_deployed": "2026-03-12T11:10:00.000Z",
+      "replicas": 4
+    },
+    {
+      "name": "inventory-service",
+      "type": "service",
+      "owner_team": "catalog-team",
+      "criticality": "high",
+      "current_version": "2.0.4",
+      "last_deployed": "2026-03-12T11:10:00.000Z",
+      "replicas": 3
+    },
+    {
+      "name": "notification-service",
+      "type": "service",
+      "owner_team": "platform-team",
+      "criticality": "medium",
+      "current_version": "3.2.1",
+      "last_deployed": "2026-03-12T11:10:00.000Z",
+      "replicas": 2
+    },
+    {
+      "name": "postgres-payments",
+      "type": "database",
+      "owner_team": "data-team",
+      "criticality": "high",
+      "current_version": "PostgreSQL 16",
+      "last_deployed": "2026-03-12T11:10:00.000Z",
+      "replicas": 1
+    },
+    {
+      "name": "redis-cache",
+      "type": "cache",
+      "owner_team": "platform-team",
+      "criticality": "medium",
+      "current_version": "Redis 7",
+      "last_deployed": "2026-03-12T11:10:00.000Z",
+      "replicas": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "web-frontend",
+      "to": "api-gateway",
+      "type": "sync",
+      "protocol": "HTTPS",
+      "timeout_ms": 5000,
+      "note": "Checkout and browse requests."
+    },
+    {
+      "from": "api-gateway",
+      "to": "order-service",
+      "type": "sync",
+      "protocol": "HTTP",
+      "timeout_ms": 35000,
+      "note": "Checkout orchestration."
+    },
+    {
+      "from": "api-gateway",
+      "to": "auth-service",
+      "type": "sync",
+      "protocol": "HTTP",
+      "timeout_ms": 1000,
+      "note": "Token validation."
+    },
+    {
+      "from": "order-service",
+      "to": "payment-service",
+      "type": "sync",
+      "protocol": "HTTP",
+      "timeout_ms": 10000,
+      "note": "Two retries after initial attempt; client timeout 10 seconds."
+    },
+    {
+      "from": "payment-service",
+      "to": "postgres-payments",
+      "type": "sync",
+      "protocol": "PostgreSQL",
+      "timeout_ms": 30000,
+      "note": "Hikari connection acquisition timeout 30 seconds."
+    },
+    {
+      "from": "order-service",
+      "to": "inventory-service",
+      "type": "sync",
+      "protocol": "HTTP",
+      "timeout_ms": 1500,
+      "note": "Inventory reservation."
+    },
+    {
+      "from": "inventory-service",
+      "to": "redis-cache",
+      "type": "sync",
+      "protocol": "RESP",
+      "timeout_ms": 500,
+      "note": "Stock cache."
+    },
+    {
+      "from": "order-service",
+      "to": "notification-service",
+      "type": "async",
+      "protocol": "AMQP",
+      "timeout_ms": 5000,
+      "note": "Order event notifications."
+    },
+    {
+      "from": "payment-service",
+      "to": "PayGate",
+      "type": "sync",
+      "protocol": "HTTPS",
+      "timeout_ms": 5000,
+      "note": "External card and UPI gateway."
+    },
+    {
+      "from": "notification-service",
+      "to": "TextFast",
+      "type": "async",
+      "protocol": "HTTPS",
+      "timeout_ms": 5000,
+      "note": "SMS delivery."
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "ALT-001",
+    "ts": "2026-03-16T09:22:00.000Z",
+    "name": "RedisMemoryHigh",
+    "severity": "warning",
+    "state": "resolved",
+    "description": "Redis memory 78% during nightly key rebuild",
+    "resolved_at": "2026-03-16T09:33:00.000Z"
+  },
+  {
+    "id": "ALT-002",
+    "ts": "2026-03-16T09:12:00.000Z",
+    "name": "NotificationLivenessRestart",
+    "severity": "info",
+    "state": "resolved",
+    "description": "Notification pod liveness failure self-healed; exit code 1",
+    "resolved_at": "2026-03-16T09:13:00.000Z"
+  },
+  {
+    "id": "ALT-003",
+    "ts": "2026-03-16T10:19:30.000Z",
+    "name": "InventoryMemoryHigh",
+    "severity": "warning",
+    "state": "firing",
+    "description": "Inventory pod memory elevated",
+    "resolved_at": "2026-03-16T10:19:30.000Z"
+  },
+  {
+    "id": "ALT-004",
+    "ts": "2026-03-16T10:31:00.000Z",
+    "name": "InventoryHighLatency",
+    "severity": "warning",
+    "state": "firing",
+    "description": "Inventory p99 latency elevated",
+    "resolved_at": "2026-03-16T10:31:00.000Z"
+  },
+  {
+    "id": "ALT-005",
+    "ts": "2026-03-16T10:38:50.000Z",
+    "name": "PodOOMKilled",
+    "severity": "critical",
+    "state": "firing",
+    "description": "Inventory container OOMKilled",
+    "resolved_at": "2026-03-16T10:38:50.000Z"
+  },
+  {
+    "id": "ALT-006",
+    "ts": "2026-03-16T10:44:30.000Z",
+    "name": "order-service HighErrorRate",
+    "severity": "critical",
+    "state": "firing",
+    "description": "Order service error rate elevated",
+    "resolved_at": "2026-03-16T10:44:30.000Z"
+  },
+  {
+    "id": "ALT-007",
+    "ts": "2026-03-16T10:46:00.000Z",
+    "name": "checkout SLO burn",
+    "severity": "critical",
+    "state": "firing",
+    "description": "Checkout error budget burn elevated",
+    "resolved_at": "2026-03-16T10:46:00.000Z"
+  },
+  {
+    "id": "ALT-008",
+    "ts": "2026-03-16T10:53:00.000Z",
+    "name": "KubePodCrashLooping",
+    "severity": "critical",
+    "state": "firing",
+    "description": "Inventory pod restart backoff",
+    "resolved_at": "2026-03-16T10:53:00.000Z"
+  }
+]

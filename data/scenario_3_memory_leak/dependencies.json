@@ -1,0 +1,163 @@
+{
+  "services": [
+    {
+      "name": "web-frontend",
+      "type": "frontend",
+      "owner_team": "web-team",
+      "criticality": "high",
+      "current_version": "1.4.0",
+      "last_deployed": "2026-03-14T08:00:00.000Z",
+      "replicas": 3,
+      "resources": {}
+    },
+    {
+      "name": "api-gateway",
+      "type": "gateway",
+      "owner_team": "platform-team",
+      "criticality": "critical",
+      "current_version": "4.4.2",
+      "last_deployed": "2026-03-14T08:00:00.000Z",
+      "replicas": 3,
+      "resources": {}
+    },
+    {
+      "name": "auth-service",
+      "type": "service",
+      "owner_team": "platform-team",
+      "criticality": "high",
+      "current_version": "1.9.3",
+      "last_deployed": "2026-03-14T08:00:00.000Z",
+      "replicas": 2,
+      "resources": {}
+    },
+    {
+      "name": "order-service",
+      "type": "service",
+      "owner_team": "commerce-team",
+      "criticality": "critical",
+      "current_version": "2.3.0",
+      "last_deployed": "2026-03-16T09:45:00.000Z",
+      "replicas": 4,
+      "resources": {}
+    },
+    {
+      "name": "payment-service",
+      "type": "service",
+      "owner_team": "payments-team",
+      "criticality": "critical",
+      "current_version": "1.7.4",
+      "last_deployed": "2026-03-14T08:00:00.000Z",
+      "replicas": 4,
+      "resources": {}
+    },
+    {
+      "name": "inventory-service",
+      "type": "service",
+      "owner_team": "catalog-team",
+      "criticality": "high",
+      "current_version": "2.1.0",
+      "last_deployed": "2026-03-16T08:32:00.000Z",
+      "replicas": 3,
+      "resources": {
+        "memory_limit": "1Gi",
+        "jvm_heap_max_mb": 768
+      }
+    },
+    {
+      "name": "notification-service",
+      "type": "service",
+      "owner_team": "platform-team",
+      "criticality": "medium",
+      "current_version": "3.2.1",
+      "last_deployed": "2026-03-14T08:00:00.000Z",
+      "replicas": 2,
+      "resources": {}
+    },
+    {
+      "name": "postgres-payments",
+      "type": "database",
+      "owner_team": "payments-team",
+      "criticality": "critical",
+      "current_version": "15.4",
+      "last_deployed": "2026-03-14T08:00:00.000Z",
+      "replicas": 1,
+      "resources": {}
+    },
+    {
+      "name": "redis-cache",
+      "type": "cache",
+      "owner_team": "catalog-team",
+      "criticality": "high",
+      "current_version": "7.2",
+      "last_deployed": "2026-03-14T08:00:00.000Z",
+      "replicas": 1,
+      "resources": {}
+    }
+  ],
+  "edges": [
+    {
+      "from": "web-frontend",
+      "to": "api-gateway",
+      "type": "sync",
+      "protocol": "HTTP",
+      "timeout_ms": 3000,
+      "note": "HTTP"
+    },
+    {
+      "from": "api-gateway",
+      "to": "order-service",
+      "type": "sync",
+      "protocol": "HTTP",
+      "timeout_ms": 3000,
+      "note": "HTTP; retries=1"
+    },
+    {
+      "from": "api-gateway",
+      "to": "auth-service",
+      "type": "sync",
+      "protocol": "HTTP",
+      "timeout_ms": 3000,
+      "note": "HTTP"
+    },
+    {
+      "from": "order-service",
+      "to": "payment-service",
+      "type": "sync",
+      "protocol": "HTTP",
+      "timeout_ms": 1000,
+      "note": "HTTP; retries=2"
+    },
+    {
+      "from": "order-service",
+      "to": "inventory-service",
+      "type": "sync",
+      "protocol": "HTTP",
+      "timeout_ms": 1000,
+      "note": "HTTP; retries=1"
+    },
+    {
+      "from": "inventory-service",
+      "to": "redis-cache",
+      "type": "sync",
+      "protocol": "RESP",
+      "timeout_ms": 3000,
+      "note": "RESP"
+    },
+    {
+      "from": "order-service",
+      "to": "notification-service",
+      "type": "async",
+      "protocol": "async queue",
+      "timeout_ms": 1000,
+      "note": "async queue"
+    },
+    {
+      "from": "payment-service",
+      "to": "postgres-payments",
+      "type": "sync",
+      "protocol": "JDBC",
+      "timeout_ms": 3000,
+      "note": "JDBC"
+    }
+  ]
+}

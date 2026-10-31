@@ -1,0 +1,78 @@
+{
+  "incidents": [
+    {
+      "id": "INC-1850",
+      "date": "2025-11-02",
+      "title": "Login failures",
+      "symptoms": [
+        "Authentication requests failed"
+      ],
+      "root_cause": "Expired certificate on auth-service",
+      "fix": "Renewed certificate",
+      "time_to_resolve_min": 40,
+      "services": [
+        "auth-service",
+        "api-gateway"
+      ]
+    },
+    {
+      "id": "INC-1987",
+      "date": "2025-12-09",
+      "title": "Payment-service 500s after deploy",
+      "symptoms": [
+        "Payment HTTP 500s after release"
+      ],
+      "root_cause": "Code regression; null field not handled in a new feature",
+      "fix": "Rollback",
+      "time_to_resolve_min": 14,
+      "services": [
+        "payment-service"
+      ]
+    },
+    {
+      "id": "INC-2041",
+      "date": "2026-01-21",
+      "title": "Payment-service checkout timeouts",
+      "symptoms": [
+        "Checkout timeouts"
+      ],
+      "root_cause": "db.pool.maxSize set too low",
+      "fix": "Config revert",
+      "time_to_resolve_min": 31,
+      "services": [
+        "payment-service",
+        "postgres-payments"
+      ]
+    },
+    {
+      "id": "INC-2103",
+      "date": "2026-02-14",
+      "title": "Checkout slowness during a sale",
+      "symptoms": [
+        "Elevated checkout latency during traffic surge"
+      ],
+      "root_cause": "Genuine traffic spike",
+      "fix": "Autoscaling",
+      "time_to_resolve_min": 22,
+      "services": [
+        "order-service",
+        "payment-service"
+      ]
+    },
+    {
+      "id": "INC-2150",
+      "date": "2026-02-25",
+      "title": "Postgres primary failover",
+      "symptoms": [
+        "Connection resets for 90 seconds"
+      ],
+      "root_cause": "Postgres primary failover",
+      "fix": "Self-recovered after failover",
+      "time_to_resolve_min": 12,
+      "services": [
+        "postgres-payments",
+        "payment-service"
+      ]
+    }
+  ]
+}

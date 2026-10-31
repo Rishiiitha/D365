@@ -1,0 +1,57 @@
+{
+  "changes": [
+    {
+      "id": "CFG-001",
+      "ts": "2026-03-15T10:00:20.000Z",
+      "service": "payment-service",
+      "key": "db.pool.maxSize",
+      "old_value": "50",
+      "new_value": "5",
+      "changed_by": "rahul.k",
+      "reason": "Reduce DB connections to cut RDS cost, OPS-1190",
+      "config_map": "payment-service-config",
+      "old_revision": 41,
+      "new_revision": 42
+    },
+    {
+      "id": "CFG-002",
+      "ts": "2026-03-15T09:30:00.000Z",
+      "service": "auth-service",
+      "key": "session.timeout",
+      "old_value": "30m",
+      "new_value": "45m",
+      "changed_by": "priya.n",
+      "reason": "Session duration adjustment"
+    },
+    {
+      "id": "CFG-003",
+      "ts": "2026-03-13T14:20:00.000Z",
+      "service": "api-gateway",
+      "key": "rate_limit_rps",
+      "old_value": "1000",
+      "new_value": "1200",
+      "changed_by": "platform-team",
+      "reason": "Capacity tuning"
+    },
+    {
+      "id": "CFG-004",
+      "ts": "2026-03-12T15:00:00.000Z",
+      "service": "inventory-service",
+      "key": "cache.ttl",
+      "old_value": "300",
+      "new_value": "360",
+      "changed_by": "meera.s",
+      "reason": "Cache refresh tuning"
+    },
+    {
+      "id": "CFG-005",
+      "ts": "2026-03-11T11:45:00.000Z",
+      "service": "order-service",
+      "key": "logging.level",
+      "old_value": "INFO",
+      "new_value": "DEBUG",
+      "changed_by": "rahul.k",
+      "reason": "Temporary diagnostics"
+    }
+  ]
+}

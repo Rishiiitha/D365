@@ -1,0 +1,324 @@
+{
+  "tickets": [
+    {
+      "id": "TKT-001",
+      "ts": "2026-03-15T10:04:48.000Z",
+      "customer_tier": "gold",
+      "channel": "email",
+      "text": "The payment page keeps loading and eventually shows an error.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-002",
+      "ts": "2026-03-15T10:05:10.000Z",
+      "customer_tier": "silver",
+      "channel": "chat",
+      "text": "My order could not be completed; the payment step returned an error.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-003",
+      "ts": "2026-03-15T10:06:40.000Z",
+      "customer_tier": "standard",
+      "channel": "email",
+      "text": "I retried checkout but received another server error.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-004",
+      "ts": "2026-03-15T10:07:11.000Z",
+      "customer_tier": "standard",
+      "channel": "chat",
+      "text": "It worked on the second try after waiting a bit.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-005",
+      "ts": "2026-03-15T10:08:31.000Z",
+      "customer_tier": "gold",
+      "channel": "email",
+      "text": "The payment screen is slow and then returns to the cart.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-006",
+      "ts": "2026-03-15T10:09:00.000Z",
+      "customer_tier": "silver",
+      "channel": "email",
+      "text": "The payment page keeps loading and eventually shows an error.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-007",
+      "ts": "2026-03-15T10:10:17.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "The payment screen is slow and then returns to the cart.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-008",
+      "ts": "2026-03-15T10:11:59.000Z",
+      "customer_tier": "standard",
+      "channel": "app",
+      "text": "The payment page keeps loading and eventually shows an error.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-009",
+      "ts": "2026-03-15T10:12:13.000Z",
+      "customer_tier": "gold",
+      "channel": "app",
+      "text": "Checkout fails after I confirm my card details.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-010",
+      "ts": "2026-03-15T10:13:35.000Z",
+      "customer_tier": "silver",
+      "channel": "email",
+      "text": "The payment screen is slow and then returns to the cart.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-011",
+      "ts": "2026-03-15T10:14:08.000Z",
+      "customer_tier": "silver",
+      "channel": "chat",
+      "text": "The payment page keeps loading and eventually shows an error.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-012",
+      "ts": "2026-03-15T10:15:21.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "Checkout fails after I confirm my card details.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-013",
+      "ts": "2026-03-15T10:16:12.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "The checkout confirmation never appears after payment.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-014",
+      "ts": "2026-03-15T10:17:52.000Z",
+      "customer_tier": "silver",
+      "channel": "chat",
+      "text": "The payment page keeps loading and eventually shows an error.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-015",
+      "ts": "2026-03-15T10:18:35.000Z",
+      "customer_tier": "gold",
+      "channel": "app",
+      "text": "Sometimes the payment goes through after a long wait.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-016",
+      "ts": "2026-03-15T10:19:22.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "Checkout fails after I confirm my card details.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-017",
+      "ts": "2026-03-15T10:04:18.000Z",
+      "customer_tier": "silver",
+      "channel": "email",
+      "text": "My order could not be completed; the payment step returned an error.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-018",
+      "ts": "2026-03-15T10:05:19.000Z",
+      "customer_tier": "gold",
+      "channel": "email",
+      "text": "I see a gateway timeout when submitting the order.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-019",
+      "ts": "2026-03-15T10:06:25.000Z",
+      "customer_tier": "standard",
+      "channel": "chat",
+      "text": "I retried checkout but received another server error.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-020",
+      "ts": "2026-03-15T10:07:52.000Z",
+      "customer_tier": "silver",
+      "channel": "email",
+      "text": "The payment screen is slow and then returns to the cart.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-021",
+      "ts": "2026-03-15T10:08:06.000Z",
+      "customer_tier": "silver",
+      "channel": "chat",
+      "text": "Checkout fails after I confirm my card details.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-022",
+      "ts": "2026-03-15T10:09:34.000Z",
+      "customer_tier": "gold",
+      "channel": "chat",
+      "text": "I cannot complete checkout even though my payment details are correct.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-023",
+      "ts": "2026-03-15T10:10:23.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "My order could not be completed; the payment step returned an error.",
+      "priority": "high"
+    },
+    {
+      "id": "TKT-024",
+      "ts": "2026-03-15T10:11:59.000Z",
+      "customer_tier": "standard",
+      "channel": "app",
+      "text": "The order completed only after I waited and tried again.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-025",
+      "ts": "2026-03-15T10:12:12.000Z",
+      "customer_tier": "silver",
+      "channel": "chat",
+      "text": "The checkout confirmation never appears after payment.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-026",
+      "ts": "2026-03-15T10:13:19.000Z",
+      "customer_tier": "standard",
+      "channel": "chat",
+      "text": "I retried checkout but received another server error.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-027",
+      "ts": "2026-03-15T10:14:53.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "Checkout fails after I confirm my card details.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-028",
+      "ts": "2026-03-15T10:15:20.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "The app reports a temporary payment error when I place an order.",
+      "priority": "medium"
+    },
+    {
+      "id": "TKT-029",
+      "ts": "2026-03-15T10:16:12.000Z",
+      "customer_tier": "silver",
+      "channel": "app",
+      "text": "My delivery tracking has not updated.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-030",
+      "ts": "2026-03-15T10:17:45.000Z",
+      "customer_tier": "silver",
+      "channel": "email",
+      "text": "I did not receive the promotional email.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-031",
+      "ts": "2026-03-15T10:18:44.000Z",
+      "customer_tier": "gold",
+      "channel": "email",
+      "text": "My delivery tracking has not updated.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-032",
+      "ts": "2026-03-15T10:19:50.000Z",
+      "customer_tier": "standard",
+      "channel": "email",
+      "text": "I cannot reset my password.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-033",
+      "ts": "2026-03-15T10:04:03.000Z",
+      "customer_tier": "gold",
+      "channel": "email",
+      "text": "I cannot reset my password.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-034",
+      "ts": "2026-03-15T10:05:28.000Z",
+      "customer_tier": "silver",
+      "channel": "email",
+      "text": "The item arrived in the wrong size.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-035",
+      "ts": "2026-03-15T10:06:56.000Z",
+      "customer_tier": "gold",
+      "channel": "email",
+      "text": "The item arrived in the wrong size.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-036",
+      "ts": "2026-03-15T10:07:39.000Z",
+      "customer_tier": "gold",
+      "channel": "email",
+      "text": "I cannot reset my password.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-037",
+      "ts": "2026-03-15T10:08:43.000Z",
+      "customer_tier": "gold",
+      "channel": "app",
+      "text": "My delivery tracking has not updated.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-038",
+      "ts": "2026-03-15T10:09:07.000Z",
+      "customer_tier": "silver",
+      "channel": "chat",
+      "text": "I did not receive the promotional email.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-039",
+      "ts": "2026-03-15T10:10:51.000Z",
+      "customer_tier": "standard",
+      "channel": "app",
+      "text": "My delivery tracking has not updated.",
+      "priority": "low"
+    },
+    {
+      "id": "TKT-040",
+      "ts": "2026-03-15T10:11:16.000Z",
+      "customer_tier": "silver",
+      "channel": "email",
+      "text": "I did not receive the promotional email.",
+      "priority": "low"
+    }
+  ]
+}

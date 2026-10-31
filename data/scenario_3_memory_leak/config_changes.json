@@ -1,0 +1,49 @@
+[
+  {
+    "id": "CFG-001",
+    "ts": "2026-03-16T08:32:00.000Z",
+    "service": "inventory-service",
+    "key": "inventory.local_cache.enabled",
+    "old_value": false,
+    "new_value": true,
+    "author": "release-pipeline",
+    "source": "feature flag rollout",
+    "deployment_id": "DEP-001"
+  },
+  {
+    "id": "CFG-002",
+    "ts": "2026-03-15T21:00:00.000Z",
+    "service": "api-gateway",
+    "key": "gateway.rate_limit.rpm",
+    "old_value": 900,
+    "new_value": 950,
+    "author": "rahul.k"
+  },
+  {
+    "id": "CFG-003",
+    "ts": "2026-03-14T20:00:00.000Z",
+    "service": "redis-cache",
+    "key": "maxmemory-policy",
+    "old_value": "allkeys-lru",
+    "new_value": "volatile-lru",
+    "author": "priya.n"
+  },
+  {
+    "id": "CFG-004",
+    "ts": "2026-03-13T18:00:00.000Z",
+    "service": "notification-service",
+    "key": "consumer.batch_size",
+    "old_value": 50,
+    "new_value": 60,
+    "author": "meera.s"
+  },
+  {
+    "id": "CFG-005",
+    "ts": "2026-03-12T23:00:00.000Z",
+    "service": "payment-service",
+    "key": "retry.max_attempts",
+    "old_value": 1,
+    "new_value": 2,
+    "author": "rahul.k"
+  }
+]

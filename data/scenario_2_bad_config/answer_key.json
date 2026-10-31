@@ -1,0 +1,254 @@
+{
+  "root_cause": "On 2026-03-15 at 10:00:20Z, payment-service db.pool.maxSize was reduced from 50 to 5 (ConfigMap revision 41 to 42). Four pods therefore exposed only 20 total DB connections. As morning checkout demand rose, all connections were occupied and requests queued; payment-service acquisition timed out after 30 seconds, while order-service's 10-second call timeout and retries caused the checkout 504 cascade. PostgreSQL itself remained healthy.",
+  "root_cause_evidence_ids": [
+    "CFG-001",
+    "LOG-000001",
+    "LOG-000002",
+    "LOG-000003",
+    "LOG-000004",
+    "LOG-030346",
+    "LOG-030826",
+    "LOG-030886",
+    "LOG-030072",
+    "LOG-030592",
+    "LOG-030615",
+    "INF-001449",
+    "INF-001460",
+    "INF-001462",
+    "INF-001478",
+    "TRC-0289",
+    "TRC-0290",
+    "TRC-0292",
+    "INC-2041",
+    "INJ-001",
+    "INJ-002"
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "title": "Payment DB connection pool was reduced by config change",
+      "truth": true,
+      "supporting_ids": [
+        "CFG-001",
+        "LOG-000001",
+        "LOG-000002",
+        "LOG-000003",
+        "LOG-000004",
+        "LOG-000213",
+        "LOG-030346",
+        "LOG-030826",
+        "LOG-030886",
+        "INF-001449",
+        "INF-001460",
+        "INF-001462",
+        "INC-2041",
+        "INJ-001",
+        "INJ-002"
+      ],
+      "contradicting_ids": [],
+      "expected_confidence_before_injection": 0.88,
+      "expected_confidence_after_injection": 0.99
+    },
+    {
+      "id": "H2",
+      "title": "Postgres database overloaded",
+      "truth": false,
+      "supporting_ids": [
+        "ALT-001"
+      ],
+      "contradicting_ids": [
+        "MET-DB-cpu_percent",
+        "MET-DB-active_connections",
+        "MET-DB-query_latency_ms"
+      ],
+      "expected_confidence_before_injection": 0.2,
+      "expected_confidence_after_injection": 0.01
+    },
+    {
+      "id": "H3",
+      "title": "PayGate slowness caused checkout failures",
+      "truth": false,
+      "supporting_ids": [
+        "ALT-002"
+      ],
+      "contradicting_ids": [
+        "LOG-001306",
+        "LOG-001427",
+        "LOG-001605",
+        "TRC-0289",
+        "TRC-0290"
+      ],
+      "expected_confidence_before_injection": 0.25,
+      "expected_confidence_after_injection": 0.01
+    },
+    {
+      "id": "H4",
+      "title": "Traffic spike overwhelmed the system",
+      "truth": false,
+      "supporting_ids": [
+        "MET-PAY-REQUEST-RATE-YESTERDAY"
+      ],
+      "contradicting_ids": [
+        "MET-PAY-REQUEST-RATE-YESTERDAY"
+      ],
+      "expected_confidence_before_injection": 0.3,
+      "expected_confidence_after_injection": 0.03
+    },
+    {
+      "id": "H5",
+      "title": "Order-service v2.3.1 deployment caused the incident",
+      "truth": false,
+      "supporting_ids": [
+        "DEP-001"
+      ],
+      "contradicting_ids": [
+        "ALT-008",
+        "CFG-001"
+      ],
+      "expected_confidence_before_injection": 0.2,
+      "expected_confidence_after_injection": 0.02
+    },
+    {
+      "id": "H6",
+      "title": "Payment-service code regression",
+      "truth": false,
+      "supporting_ids": [],
+      "contradicting_ids": [
+        "CFG-001",
+        "DEP-001"
+      ],
+      "expected_confidence_before_injection": 0.1,
+      "expected_confidence_after_injection": 0.01
+    }
+  ],
+  "expected_timeline": [
+    {
+      "ts": "2026-03-15T09:25:00.000Z",
+      "event": "Order-service v2.3.1 log-format deployment completed",
+      "evidence_ids": [
+        "DEP-001",
+        "ALT-008"
+      ]
+    },
+    {
+      "ts": "2026-03-15T10:00:20.000Z",
+      "event": "Payment pool config changed; ConfigMap revision 41 to 42",
+      "evidence_ids": [
+        "CFG-001",
+        "INJ-001"
+      ]
+    },
+    {
+      "ts": "2026-03-15T10:01:00.000Z",
+      "event": "Reloader began restarting payment pods",
+      "evidence_ids": [
+        "INF-001449",
+        "INF-001460",
+        "INF-001462",
+        "INF-001478"
+      ]
+    },
+    {
+      "ts": "2026-03-15T10:04:40.000Z",
+      "event": "PayGate latency decoy resolved",
+      "evidence_ids": [
+        "LOG-001306",
+        "LOG-001427",
+        "LOG-001605"
+      ]
+    },
+    {
+      "ts": "2026-03-15T10:08:50.000Z",
+      "event": "First order-service read timeout",
+      "evidence_ids": [
+        "LOG-030072"
+      ]
+    },
+    {
+      "ts": "2026-03-15T10:09:20.000Z",
+      "event": "First Hikari connection acquisition timeout",
+      "evidence_ids": [
+        "LOG-030346"
+      ]
+    }
+  ],
+  "expected_impact": {
+    "services": [
+      "payment-service",
+      "order-service",
+      "api-gateway"
+    ],
+    "error_rate_peak": "about 38-40%",
+    "estimated_failed_checkouts": 4192,
+    "affected_users_note": "Sampled checkout failures represent the same share of production checkout traffic; requests that obtained a connection continued to succeed, sometimes after a long wait."
+  },
+  "remediation_options": [
+    {
+      "id": "R1",
+      "title": "Revert db.pool.maxSize from 5 to 50",
+      "risk": "medium",
+      "requires_approval": true,
+      "is_correct": true,
+      "verification_outcome": "after_config_revert",
+      "why": "Restores the known working per-pod connection capacity; rolling restart takes about 2.5 minutes."
+    },
+    {
+      "id": "R2",
+      "title": "Scale payment-service from 4 to 8 pods",
+      "risk": "high",
+      "requires_approval": true,
+      "is_correct": false,
+      "verification_outcome": "after_scale_pods",
+      "why": "Provides 40 total connections and partial relief, but remains below the previous capacity and increases cost."
+    },
+    {
+      "id": "R3",
+      "title": "Roll back payment-service image",
+      "risk": "medium",
+      "requires_approval": true,
+      "is_correct": false,
+      "verification_outcome": "after_image_rollback",
+      "why": "The image did not change; rollback does not restore the ConfigMap pool value."
+    },
+    {
+      "id": "R4",
+      "title": "Scale up the database",
+      "risk": "high",
+      "requires_approval": true,
+      "is_correct": false,
+      "verification_outcome": "after_db_scale",
+      "why": "Database CPU, SQL latency and locks are healthy; the bottleneck is the client-side pool cap."
+    }
+  ],
+  "smoking_gun_queries": [
+    {
+      "tool": "search_logs",
+      "args": {
+        "service": "payment-service",
+        "message_contains": "HikariPool-1 stats",
+        "time_from": "2026-03-15T09:55:00.000Z",
+        "time_to": "2026-03-15T10:15:00.000Z"
+      },
+      "expected_result": "Pool size falls from 12 to 5; active=5, idle=0 and pending threads rise."
+    },
+    {
+      "tool": "get_config_history",
+      "args": {
+        "service": "payment-service",
+        "key": "db.pool.maxSize",
+        "time": "2026-03-15T10:00:20.000Z"
+      },
+      "expected_result": "Value changed from 50 to 5 by rahul.k; ConfigMap revision 41 -> 42."
+    },
+    {
+      "tool": "search_traces",
+      "args": {
+        "status": "ERROR",
+        "operation": "db.acquire_connection",
+        "time_from": "2026-03-15T10:08:00.000Z"
+      },
+      "expected_result": "Connection acquisition timeout; no Postgres query span; root checkout ends in 504 after about 31 seconds."
+    }
+  ],
+  "expected_verification": "After reverting db.pool.maxSize to 50 and completing the rolling restart at 10:24:30Z, pool waits should return to milliseconds, pending threads should drain, and payment/order/gateway errors should fall below 1% by 10:27. Database CPU and SQL latency should remain essentially unchanged."
+}
