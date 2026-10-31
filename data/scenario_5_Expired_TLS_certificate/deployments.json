@@ -1,0 +1,86 @@
+[
+  {
+    "id": "DEP-001",
+    "ts": "2026-03-16T08:32:00.000Z",
+    "service": "inventory-service",
+    "from_version": "2.0.4",
+    "to_version": "2.1.0",
+    "description": "Add in-memory product lookup cache to reduce Redis calls",
+    "author": "arjun.d",
+    "pr": "#517",
+    "rollout_finished": "2026-03-16T08:34:10.000Z",
+    "canary": false
+  },
+  {
+    "id": "DEP-002",
+    "ts": "2026-03-16T09:45:00.000Z",
+    "service": "order-service",
+    "from_version": "2.3.0",
+    "to_version": "2.3.1",
+    "description": "Log-format typo fix",
+    "author": "meera.s",
+    "pr": "#522",
+    "rollout_finished": "2026-03-16T09:47:00.000Z",
+    "canary": false
+  },
+  {
+    "id": "DEP-003",
+    "ts": "2026-03-15T17:00:00.000Z",
+    "service": "web-frontend",
+    "from_version": "1.3.8",
+    "to_version": "1.4.0",
+    "description": "Product listing layout refinement",
+    "author": "priya.n",
+    "pr": "#508",
+    "rollout_finished": "2026-03-15T17:04:00.000Z",
+    "canary": true
+  },
+  {
+    "id": "DEP-004",
+    "ts": "2026-03-14T18:00:00.000Z",
+    "service": "api-gateway",
+    "from_version": "4.4.1",
+    "to_version": "4.4.2",
+    "description": "Gateway request metrics update",
+    "author": "rahul.k",
+    "pr": "#501",
+    "rollout_finished": "2026-03-14T18:05:00.000Z",
+    "canary": false
+  },
+  {
+    "id": "DEP-005",
+    "ts": "2026-03-13T16:00:00.000Z",
+    "service": "auth-service",
+    "from_version": "1.9.2",
+    "to_version": "1.9.3",
+    "description": "Token validation optimization",
+    "author": "meera.s",
+    "pr": "#497",
+    "rollout_finished": "2026-03-13T16:03:00.000Z",
+    "canary": false
+  },
+  {
+    "id": "DEP-006",
+    "ts": "2026-03-12T19:00:00.000Z",
+    "service": "payment-service",
+    "from_version": "1.7.3",
+    "to_version": "1.7.4",
+    "description": "Payment retry instrumentation",
+    "author": "rahul.k",
+    "pr": "#492",
+    "rollout_finished": "2026-03-12T19:04:00.000Z",
+    "canary": false
+  },
+  {
+    "id": "DEP-007",
+    "ts": "2026-03-11T17:00:00.000Z",
+    "service": "notification-service",
+    "from_version": "3.2.0",
+    "to_version": "3.2.1",
+    "description": "Email template correction",
+    "author": "meera.s",
+    "pr": "#488",
+    "rollout_finished": "2026-03-11T17:03:00.000Z",
+    "canary": false
+  }
+]

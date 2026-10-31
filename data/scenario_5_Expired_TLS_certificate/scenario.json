@@ -1,0 +1,51 @@
+{
+  "id": "scenario_3_memory_leak",
+  "folder": "scenario_3_memory_leak",
+  "title": "Memory leak causing restart loop (inventory-service)",
+  "sidebar_label": "Memory leak / restart loop",
+  "affected_service": "inventory-service",
+  "severity": "critical",
+  "date": "2026-03-16",
+  "window_start": "2026-03-16T08:00:00.000Z",
+  "window_end": "2026-03-16T11:00:00.000Z",
+  "default_clock": "2026-03-16T10:55:00.000Z",
+  "log_sampling_note": "Background application sampling is reduced for the 3-hour window; lookup telemetry is sampled and request_rate_per_min metrics represent the full workload. lookup_event_sample_ratio=0.012; trace sampling is increased during the restart window for minute-level error-rate agreement.",
+  "allowed_actions": [
+    {
+      "action_id": "R1",
+      "label": "Roll back inventory-service to v2.0.4 (RB-INV-204)",
+      "risk": "medium",
+      "outcome": "after_rollback"
+    },
+    {
+      "action_id": "R2",
+      "label": "Disable inventory.local_cache.enabled and rolling restart",
+      "risk": "low",
+      "outcome": "after_flag_disable"
+    },
+    {
+      "action_id": "R3",
+      "label": "Restart inventory pods only",
+      "risk": "low",
+      "outcome": "after_restart_only"
+    },
+    {
+      "action_id": "R4",
+      "label": "Raise memory limit from 1Gi to 2Gi",
+      "risk": "medium",
+      "outcome": "after_raise_limit"
+    },
+    {
+      "action_id": "R5",
+      "label": "Scale inventory replicas from 3 to 6",
+      "risk": "medium",
+      "outcome": "after_scale_replicas"
+    },
+    {
+      "action_id": "R6",
+      "label": "No action",
+      "risk": "none",
+      "outcome": "no_action"
+    }
+  ]
+}
